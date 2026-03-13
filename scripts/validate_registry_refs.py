@@ -92,8 +92,24 @@ def validate_inheritable(obj: dict, registries: dict, source: str,
     r = registries
     check_refs(obj.get("report_sector", []), r["report_sector"], "report_sector", source, errors)
     check_refs(obj.get("audit_type", []), r["audit_type"], "audit_type", source, errors)
-    check_refs(obj.get("main_audited_entities", []), r["entities"], "main_audited_entities", source, errors)
-    check_refs(obj.get("other_audited_entities", []), r["entities"], "other_audited_entities", source, errors)
+    # main_audited_entities — array of {ministry, department, autonomous_bodies, other_bodies}
+    for entry in obj.get("main_audited_entities", []):
+        if isinstance(entry, dict):
+            check_ref(entry.get("ministry"), r["entities"], "main_audited_entities.ministry", source, errors)
+            check_ref(entry.get("department"), r["entities"], "main_audited_entities.department", source, errors)
+            check_refs(entry.get("autonomous_bodies", []), r["entities"], "main_audited_entities.autonomous_bodies", source, errors)
+            check_refs(entry.get("other_bodies", []), r["entities"], "main_audited_entities.other_bodies", source, errors)
+        else:
+            check_ref(entry, r["entities"], "main_audited_entities", source, errors)
+    # other_audited_entities — same structure
+    for entry in obj.get("other_audited_entities", []):
+        if isinstance(entry, dict):
+            check_ref(entry.get("ministry"), r["entities"], "other_audited_entities.ministry", source, errors)
+            check_ref(entry.get("department"), r["entities"], "other_audited_entities.department", source, errors)
+            check_refs(entry.get("autonomous_bodies", []), r["entities"], "other_audited_entities.autonomous_bodies", source, errors)
+            check_refs(entry.get("other_bodies", []), r["entities"], "other_audited_entities.other_bodies", source, errors)
+        else:
+            check_ref(entry, r["entities"], "other_audited_entities", source, errors)
     check_refs(obj.get("primary_schemes", []), r["schemes"], "primary_schemes", source, errors)
     check_refs(obj.get("other_schemes", []), r["schemes"], "other_schemes", source, errors)
     coverage = obj.get("examination_coverage", {})
@@ -124,8 +140,7 @@ def validate_metadata_file(report_dir: Path, registries: dict,
     if not metadata:
         return errors
 
-    # product_type (from common_metadata, embedded in metadata.json)
-    check_ref(metadata.get("product_type"), registries["product_type"], "product_type", "metadata.json", errors)
+    # product_type lives in manifest.json, not metadata.json — skip here (checked via manifest)
 
     # state_ut
     rl_data = metadata.get("report_level", {})
@@ -149,9 +164,9 @@ def validate_structure_node(node: dict, registries: dict, source: str, errors: l
         node_id = node.get("unit_id", "?")
         errors.extend(validate_inheritable(node["metadata"], registries, f"{source}/{node_id}",
                                            audit_findings_ids=audit_findings_ids))
-    for section in (node.get("content_units", []) + node.get("front_matter", [])
-                    + node.get("back_matter", [])):
-        validate_structure_node(section, registries, source, errors, audit_findings_ids)
+    # Note: 'children' in a content_unit is an array of unit_id strings, not nested objects.
+    # Nested unit objects only exist at root level (front_matter/content_units/back_matter).
+    # No recursive traversal needed here — unit-level metadata is validated via unit files.
 
 
 def validate_structure_file(report_dir: Path, registries: dict,
