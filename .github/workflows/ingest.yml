@@ -59,29 +59,10 @@ jobs:
         id: resolve
         run: |
           if [ -n "${{ github.event.inputs.product_ids }}" ]; then
-            # Use explicitly provided IDs
             echo "ids=${{ github.event.inputs.product_ids }}" >> $GITHUB_OUTPUT
           else
-            # Auto-detect from git diff.
-            # The repo layout is:
-            #   reports/{product_type}/{year}/{product_id}/          (UNION)
-            #   reports/{product_type}/{year}/{state_code}/{product_id}/  (STATE/UT/LG)
-            # product_id is always the deepest folder that contains a manifest.json.
-            CHANGED=$(git diff --name-only HEAD~1 HEAD \
-              | grep '^reports/' \
-              | python3 -c "
-import sys, pathlib
-ids = set()
-for line in sys.stdin:
-    p = pathlib.Path(line.strip())
-    # Walk up from changed file to find the folder with manifest.json
-    for parent in p.parents:
-        if (parent / 'manifest.json').exists():
-            ids.add(parent.name)
-            break
-print(','.join(sorted(ids)))
-")
-            echo "ids=$CHANGED" >> $GITHUB_OUTPUT
+            git diff --name-only HEAD~1 HEAD | grep '^reports/' > /tmp/changed_files.txt || true
+            python3 scripts/resolve_product_ids.py /tmp/changed_files.txt >> $GITHUB_OUTPUT
           fi
 
       - name: Show resolved IDs
