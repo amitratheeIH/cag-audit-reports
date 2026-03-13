@@ -1,7 +1,16 @@
 {
-  "$schema": "../../../../../../schemas/structure.schema",
-  "product_id": "AR06-CAG-2023-STATE-MP",
-  "front_matter": [],
+  "front_matter": [
+    {
+      "unit_id": "AR06-CAG-2023-STATE-MP-PREFACE",
+      "unit_type": "preface",
+      "title": {
+        "en": "Preface",
+        "hi": "प्रस्तावना"
+      },
+      "seq": 10,
+      "toc_include": true
+    }
+  ],
   "content_units": [],
   "back_matter": []
 }

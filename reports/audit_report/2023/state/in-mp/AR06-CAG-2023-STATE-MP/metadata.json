@@ -1,19 +1,18 @@
 {
-  "$schema": "../../../../../../schemas/audit_report_metadata.schema",
   "inheritable": {
-    "audit_type": [
-      "ATYPE-PERFORMANCE",
-      "ATYPE-ENVIRONMENTAL"
-    ],
-    "report_sector": [
-      "SECT-CIVIL"
-    ],
+    "audit_type": ["ATYPE-PERFORMANCE", "ATYPE-ENVIRONMENTAL"],
+    "report_sector": ["SECT-CIVIL"],
     "audit_period": {
-      "from": "2016-04-01",
-      "to": "2021-03-31"
+      "start_year": 2016,
+      "end_year": 2021
     },
     "main_audited_entities": [
-      "IN-MP-DEPT-WATER-RESOURCES"
+      {
+        "ministry": null,
+        "department": "IN-MP-DEPT-WATER-RESOURCES",
+        "autonomous_bodies": [],
+        "other_bodies": []
+      }
     ],
     "primary_schemes": [],
     "topics": [
@@ -25,59 +24,54 @@
     ]
   },
   "report_level": {
-    "report_number": "6",
+    "report_number": {
+      "number": 6,
+      "year": 2023
+    },
     "jurisdiction": "STATE",
     "state_ut": {
       "id": "IN-MP",
       "name": {
         "en": "Madhya Pradesh",
         "hi": "मध्य प्रदेश"
-      },
-      "status_at_report_date": "active"
+      }
     },
     "audit_report_status": "tabled",
+    "date_of_submission_to_government": "2023-06-21",
     "tabling": {
-      "tabled_on": "2024-02-08",
+      "applicable": true,
+      "legislature": "State Legislature",
       "lower_house": {
-        "tabled": true,
-        "tabled_on": "2024-02-08",
-        "house_name": {
+        "name": {
           "en": "Madhya Pradesh Vidhan Sabha",
           "hi": "मध्य प्रदेश विधान सभा"
-        }
+        },
+        "date_of_placing": "2024-02-08"
       }
     },
-    "sent_to_government_on": "2023-06-21",
-    "signed": {
-      "signed_by": {
-        "name": "Priya Parikh",
-        "designation": {
-          "en": "Accountant General (Audit II), Madhya Pradesh",
-          "hi": "महालेखाकार (लेखापरीक्षा II), मध्य प्रदेश"
-        },
-        "place": "Bhopal",
-        "date": "2023-06-16"
+    "signed_by": {
+      "name": { "en": "Priya Parikh" },
+      "designation": {
+        "en": "Accountant General (Audit II), Madhya Pradesh",
+        "hi": "महालेखाकार (लेखापरीक्षा II), मध्य प्रदेश"
       },
-      "countersigned_by": {
-        "name": "Girish Chandra Murmu",
-        "designation": {
-          "en": "Comptroller and Auditor General of India",
-          "hi": "भारत के नियंत्रक-महालेखापरीक्षक"
-        },
-        "place": "New Delhi",
-        "date": "2023-06-19"
-      }
+      "date": "2023-06-16",
+      "place": { "en": "Bhopal", "hi": "भोपाल" }
+    },
+    "countersigned_by": {
+      "name": { "en": "Girish Chandra Murmu" },
+      "designation": {
+        "en": "Comptroller and Auditor General of India",
+        "hi": "भारत के नियंत्रक-महालेखापरीक्षक"
+      },
+      "date": "2023-06-19",
+      "place": { "en": "New Delhi", "hi": "नई दिल्ली" }
     },
     "report_structure": "standalone",
-    "coverage_period": {
-      "en": "2016-17 to 2020-21",
-      "hi": "2016-17 से 2020-21"
-    },
     "pdf_assets": {
       "complete": {
         "en": {
-          "local_path": "pdfs/en/complete/AR06-CAG-2023-STATE-MP-en.pdf",
-          "page_count": null
+          "local_path": "pdfs/en/complete/AR06-CAG-2023-STATE-MP-en.pdf"
         }
       }
     }
