@@ -21,7 +21,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install jsonschema referencing fastjsonschema check-jsonschema
+          pip install -r requirements.txt
 
       - name: Sync product_type enum (check mode)
         run: python scripts/sync_product_type_enum.py --check
