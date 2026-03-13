@@ -37,6 +37,10 @@ def make_resolver() -> RefResolver:
     schema_store = {}
     for schema_path in rl.SCHEMAS_DIR.glob("*.schema"):
         schema = json.loads(schema_path.read_text())
+        # Store by file URI so $ref resolution works even without $id fields
+        file_uri = schema_path.as_uri()
+        schema_store[file_uri] = schema
+        # Also store by $id if present
         if "$id" in schema:
             schema_store[schema["$id"]] = schema
     base_uri = rl.SCHEMAS_DIR.as_uri() + "/"
@@ -44,7 +48,14 @@ def make_resolver() -> RefResolver:
 
 
 def validate_json(data, schema: dict, resolver: RefResolver, source: Path) -> list[str]:
-    validator = Draft7Validator(schema, resolver=resolver)
+    # Create a schema-scoped resolver so internal $refs like #/definitions/...
+    # resolve against this schema's own store, not an empty referrer.
+    schema_resolver = RefResolver(
+        base_uri=resolver.resolution_scope,
+        referrer=schema,
+        store=resolver.store,
+    )
+    validator = Draft7Validator(schema, resolver=schema_resolver)
     errors = sorted(validator.iter_errors(data), key=lambda e: list(e.path))
     return [
         f"  [{source.name}] {'.'.join(str(p) for p in e.path) or '(root)'}: {e.message}"
