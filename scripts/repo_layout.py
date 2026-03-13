@@ -9,8 +9,9 @@ Canonical layout:
   reports/
     {product_type}/               # audit_report | accounts_report | state_finance_report
       {year}/                     #              | study_report | audit_impact_report | other
-        {state_ut_code}/          # e.g. in-mp, in-jk   ← STATE and UT reports ONLY
-          {product_id}/           # e.g. AR06-CAG-2023-STATE-MP
+        {jurisdiction}/           # e.g. state, ut, union, lg
+          {state_ut_code}/        # e.g. in-mp, in-jk   ← STATE, UT and LG reports ONLY
+            {product_id}/         # e.g. AR06-CAG-2023-STATE-MP
             manifest.json
             metadata.json
             structure.json
@@ -29,7 +30,7 @@ Canonical layout:
                                   #   (not committed to git; .gitignore'd)
 
   UNION jurisdiction reports have NO state_ut_code folder:
-    reports/{product_type}/{year}/{product_id}/
+    reports/{product_type}/{year}/union/{product_id}/
 
   LG (Local Government) jurisdiction reports follow STATE pattern,
   using the state_ut_code of the state in which the LG operates.
@@ -111,8 +112,8 @@ def report_dir(
     """
     Return the absolute path to a report folder given its key attributes.
 
-    For STATE / UT / LG:   reports/{product_type}/{year}/{state_folder}/{product_id}/
-    For UNION:             reports/{product_type}/{year}/{product_id}/
+    For STATE / UT / LG:   reports/{product_type}/{year}/{jurisdiction}/{state_folder}/{product_id}/
+    For UNION:             reports/{product_type}/{year}/union/{product_id}/
     """
     base = REPORTS_DIR / product_type / str(year)
     if jurisdiction in JURISDICTIONS_WITH_STATE_FOLDER:
@@ -120,8 +121,8 @@ def report_dir(
             raise ValueError(
                 f"jurisdiction={jurisdiction} requires state_ut_id to be provided"
             )
-        return base / state_folder_name(state_ut_id) / product_id
-    return base / product_id
+        return base / jurisdiction.lower() / state_folder_name(state_ut_id) / product_id
+    return base / jurisdiction.lower() / product_id
 
 
 def report_dir_from_manifest(manifest_path: Path) -> Path:

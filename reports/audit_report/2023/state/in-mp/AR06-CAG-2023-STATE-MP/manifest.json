@@ -1,0 +1,30 @@
+{
+  "$schema": "../../../../../../schemas/manifest.schema",
+  "$version": "3.1",
+  "product_id": "AR06-CAG-2023-STATE-MP",
+  "product_type": "audit_report",
+  "year": 2023,
+  "title": {
+    "en": "Performance Audit on Degradation of Kshipra River for the year ended 31 March 2021",
+    "hi": "31 मार्च 2021 को समाप्त वर्ष के लिए क्षिप्रा नदी के क्षरण पर निष्पादन लेखापरीक्षा"
+  },
+  "languages": [
+    "en"
+  ],
+  "schema_versions": {
+    "manifest.schema": "3.1",
+    "audit_report_metadata.schema": "3.5",
+    "inheritable_audit_metadata.schema": "3.6",
+    "structure.schema": "3.2",
+    "content_block.schema": "3.4",
+    "atn.schema": "3.2"
+  },
+  "file_lists": {
+    "metadata": "metadata.json",
+    "structure": "structure.json",
+    "units": [],
+    "blocks": [],
+    "pdfs": []
+  },
+  "file_checksums": {}
+}

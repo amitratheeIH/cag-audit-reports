@@ -1,0 +1,85 @@
+{
+  "$schema": "../../../../../../schemas/audit_report_metadata.schema",
+  "inheritable": {
+    "audit_type": [
+      "ATYPE-PERFORMANCE",
+      "ATYPE-ENVIRONMENTAL"
+    ],
+    "report_sector": [
+      "SECT-CIVIL"
+    ],
+    "audit_period": {
+      "from": "2016-04-01",
+      "to": "2021-03-31"
+    },
+    "main_audited_entities": [
+      "IN-MP-DEPT-WATER-RESOURCES"
+    ],
+    "primary_schemes": [],
+    "topics": [
+      "environment_forests",
+      "water_resources",
+      "river_management",
+      "pollution_control",
+      "water_quality_monitoring"
+    ]
+  },
+  "report_level": {
+    "report_number": "6",
+    "jurisdiction": "STATE",
+    "state_ut": {
+      "id": "IN-MP",
+      "name": {
+        "en": "Madhya Pradesh",
+        "hi": "मध्य प्रदेश"
+      },
+      "status_at_report_date": "active"
+    },
+    "audit_report_status": "tabled",
+    "tabling": {
+      "tabled_on": "2024-02-08",
+      "lower_house": {
+        "tabled": true,
+        "tabled_on": "2024-02-08",
+        "house_name": {
+          "en": "Madhya Pradesh Vidhan Sabha",
+          "hi": "मध्य प्रदेश विधान सभा"
+        }
+      }
+    },
+    "sent_to_government_on": "2023-06-21",
+    "signed": {
+      "signed_by": {
+        "name": "Priya Parikh",
+        "designation": {
+          "en": "Accountant General (Audit II), Madhya Pradesh",
+          "hi": "महालेखाकार (लेखापरीक्षा II), मध्य प्रदेश"
+        },
+        "place": "Bhopal",
+        "date": "2023-06-16"
+      },
+      "countersigned_by": {
+        "name": "Girish Chandra Murmu",
+        "designation": {
+          "en": "Comptroller and Auditor General of India",
+          "hi": "भारत के नियंत्रक-महालेखापरीक्षक"
+        },
+        "place": "New Delhi",
+        "date": "2023-06-19"
+      }
+    },
+    "report_structure": "standalone",
+    "coverage_period": {
+      "en": "2016-17 to 2020-21",
+      "hi": "2016-17 से 2020-21"
+    },
+    "pdf_assets": {
+      "complete": {
+        "en": {
+          "local_path": "pdfs/en/complete/AR06-CAG-2023-STATE-MP-en.pdf",
+          "page_count": null
+        }
+      }
+    }
+  }
+}
