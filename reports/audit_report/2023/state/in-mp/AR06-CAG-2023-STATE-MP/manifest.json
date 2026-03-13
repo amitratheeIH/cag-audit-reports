@@ -12,19 +12,23 @@
     "atn.schema": "3.2"
   },
   "units": [
-    "units/AR06-CAG-2023-STATE-MP-PREFACE.json"
+    "units/AR06-CAG-2023-STATE-MP-PREFACE.json",
+    "units/AR06-CAG-2023-STATE-MP-ES.json"
   ],
   "blocks": [
-    "blocks/content_block_PREFACE.ndjson"
+    "blocks/content_block_PREFACE.ndjson",
+    "blocks/content_block_ES.ndjson"
   ],
   "file_lists": {
     "metadata": "metadata.json",
     "structure": "structure.json",
     "units": [
-      "units/AR06-CAG-2023-STATE-MP-PREFACE.json"
+      "units/AR06-CAG-2023-STATE-MP-PREFACE.json",
+      "units/AR06-CAG-2023-STATE-MP-ES.json"
     ],
     "blocks": [
-      "blocks/content_block_PREFACE.ndjson"
+      "blocks/content_block_PREFACE.ndjson",
+      "blocks/content_block_ES.ndjson"
     ],
     "datasets": [],
     "footnotes": [],

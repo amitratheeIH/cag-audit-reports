@@ -3,11 +3,15 @@
     {
       "unit_id": "AR06-CAG-2023-STATE-MP-PREFACE",
       "unit_type": "preface",
-      "title": {
-        "en": "Preface",
-        "hi": "प्रस्तावना"
-      },
+      "title": {"en": "Preface", "hi": "प्रस्तावना"},
       "seq": 10,
+      "toc_include": true
+    },
+    {
+      "unit_id": "AR06-CAG-2023-STATE-MP-ES",
+      "unit_type": "executive_summary",
+      "title": {"en": "Executive Summary", "hi": "कार्यकारी सारांश"},
+      "seq": 20,
       "toc_include": true
     }
   ],
