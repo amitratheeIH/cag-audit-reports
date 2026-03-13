@@ -15,38 +15,38 @@
       "label": {
         "en": "District"
       },
-      "col_type": "text"
+      "data_type": "string"
     },
     {
       "id": "total_area",
       "label": {
         "en": "Total Area"
       },
-      "col_type": "numeric",
-      "unit": "sq. km"
+      "unit": "sq. km",
+      "data_type": "decimal"
     },
     {
       "id": "kshipra_area",
       "label": {
         "en": "Area under Kshipra Sub-basin"
       },
-      "col_type": "numeric",
-      "unit": "sq. km"
+      "unit": "sq. km",
+      "data_type": "decimal"
     },
     {
       "id": "block",
       "label": {
         "en": "Block"
       },
-      "col_type": "text"
+      "data_type": "string"
     },
     {
       "id": "block_area",
       "label": {
         "en": "Block Area"
       },
-      "col_type": "numeric",
-      "unit": "sq. km"
+      "unit": "sq. km",
+      "data_type": "decimal"
     }
   ],
   "data": [

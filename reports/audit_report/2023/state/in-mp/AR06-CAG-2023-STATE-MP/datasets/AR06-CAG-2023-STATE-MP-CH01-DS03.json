@@ -14,42 +14,42 @@
       "label": {
         "en": "S.N."
       },
-      "col_type": "index"
+      "data_type": "string"
     },
     {
       "id": "river",
       "label": {
         "en": "River"
       },
-      "col_type": "text"
+      "data_type": "string"
     },
     {
       "id": "station",
       "label": {
         "en": "Monitoring Station"
       },
-      "col_type": "text"
+      "data_type": "string"
     },
     {
       "id": "mar2018",
       "label": {
         "en": "March 2018"
       },
-      "col_type": "text"
+      "data_type": "string"
     },
     {
       "id": "mar2020",
       "label": {
         "en": "March 2020"
       },
-      "col_type": "text"
+      "data_type": "string"
     },
     {
       "id": "mar2021",
       "label": {
         "en": "March 2021"
       },
-      "col_type": "text"
+      "data_type": "string"
     }
   ],
   "data": [

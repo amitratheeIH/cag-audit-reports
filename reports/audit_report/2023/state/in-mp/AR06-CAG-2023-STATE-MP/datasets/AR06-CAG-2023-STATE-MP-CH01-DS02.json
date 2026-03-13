@@ -14,35 +14,35 @@
       "label": {
         "en": "S.N."
       },
-      "col_type": "index"
+      "data_type": "string"
     },
     {
       "id": "river",
       "label": {
         "en": "Name of River"
       },
-      "col_type": "text"
+      "data_type": "string"
     },
     {
       "id": "stretch",
       "label": {
         "en": "Polluted Stretch"
       },
-      "col_type": "text"
+      "data_type": "string"
     },
     {
       "id": "bod",
       "label": {
         "en": "BOD Range"
       },
-      "col_type": "text"
+      "data_type": "string"
     },
     {
       "id": "priority",
       "label": {
         "en": "Priority of Stretch"
       },
-      "col_type": "text"
+      "data_type": "string"
     }
   ],
   "data": [

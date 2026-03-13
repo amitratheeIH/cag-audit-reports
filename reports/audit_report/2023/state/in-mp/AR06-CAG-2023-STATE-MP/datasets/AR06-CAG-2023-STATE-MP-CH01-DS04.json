@@ -11,21 +11,21 @@
       "label": {
         "en": "Major Hypothesis"
       },
-      "col_type": "text"
+      "data_type": "string"
     },
     {
       "id": "submajor",
       "label": {
         "en": "Sub-major Hypothesis"
       },
-      "col_type": "text"
+      "data_type": "string"
     },
     {
       "id": "chapter",
       "label": {
         "en": "Chapter"
       },
-      "col_type": "text"
+      "data_type": "string"
     }
   ],
   "data": [
