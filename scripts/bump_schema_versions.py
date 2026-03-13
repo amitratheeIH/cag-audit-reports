@@ -110,17 +110,22 @@ def infer_bump_level(schema_path: Path) -> str:
 
 
 def bump_schema_file(schema_path: Path, level: str, dry_run: bool) -> tuple[str, str] | None:
-    """Bump version in schema file. Returns (old_version, new_version) or None."""
+    """Bump version in schema file. Returns (old_version, new_version) or None.
+
+    All CAG schemas use '$version' (not 'version') as the version field.
+    """
     content = schema_path.read_text()
     schema = json.loads(content)
 
-    old_version = schema.get("version")
+    # Schemas use '$version'; fall back to 'version' for any legacy files
+    version_key = "$version" if "$version" in schema else "version"
+    old_version = schema.get(version_key)
     if not old_version:
-        print(f"  WARN  {schema_path.name}: no 'version' field found, skipping")
+        print(f"  WARN  {schema_path.name}: no '$version' or 'version' field found, skipping")
         return None
 
     new_version = bump_version(old_version, level)
-    schema["version"] = new_version
+    schema[version_key] = new_version
 
     if not dry_run:
         schema_path.write_text(json.dumps(schema, indent=2, ensure_ascii=False) + "\n")

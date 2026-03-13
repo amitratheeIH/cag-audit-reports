@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$version": "3.4",
+  "$version": "3.5",
   "title": "Content Block Schema",
-  "description": "Content block schema. v3.2: para_type cleaned up — removed deviation (belongs inside audit_finding), added executive_summary, conclusion, recommendation_summary, best_practice. callout_type cleaned up — removed audit_observation, government_reply, recommendation (these have dedicated block types). annotations[] added at block level for non-destructive span annotation of paragraph text — supports ai, human, and rule_based sources with confidence scoring and review workflow.",
+  "description": "Content block schema. v3.2: para_type cleaned up — removed deviation (belongs inside audit_finding), added executive_summary, conclusion, recommendation_summary, best_practice. callout_type cleaned up — removed audit_observation, government_reply, recommendation (these have dedicated block types). annotations[] added at block level for non-destructive span annotation of paragraph text — supports ai, human, and rule_based sources with confidence scoring and review workflow. v3.5: executive_summary_block added — first-class block type for chapter/section-level executive summaries with title, paragraphs[], and bullets[] as structured fields. Complements the flat string content_unit.executive_summary metadata field in structure.schema and the para_type=executive_summary paragraph blocks; each serves a distinct purpose: unit metadata (machine summary for TOC/vector), in-flow paragraph (single prose chunk), executive_summary_block (full structured in-flow summary with mixed content).",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -38,6 +38,7 @@
         "pullquote",
         "sidebar",
         "code",
+        "executive_summary_block",
         "divider"
       ]
     },
@@ -1734,6 +1735,114 @@
                   "decorative",
                   "page_break"
                 ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "block_type": {
+            "const": "executive_summary_block"
+          }
+        },
+        "required": [
+          "block_type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "content": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "paragraphs"
+            ],
+            "description": "Structured executive summary block. Contains an optional title, one or more prose paragraphs, and an optional list of key bullets (findings, hypotheses, scope items). Designed for chapter or section level summaries rendered as a visually distinct in-flow unit. Distinct from: (1) content_unit.executive_summary — a flat machine-readable string on the unit for TOC/vector use; (2) paragraph blocks with para_type=executive_summary — single prose chunks without structure. Use this block type when the summary has a title and/or point-wise bullets alongside prose.",
+            "properties": {
+              "title": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "description": "Optional multilingual display title for the summary box. e.g. { \"en\": \"Executive Summary\" }. Omit for untitled summaries."
+              },
+              "paragraphs": {
+                "type": "array",
+                "minItems": 1,
+                "description": "Ordered prose paragraphs. Each is a multilingual string object. At least one required.",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "description": "Multilingual paragraph text. e.g. { \"en\": \"The Kshipra River...\" }"
+                }
+              },
+              "bullets": {
+                "type": "array",
+                "description": "Optional ordered list of key points — findings, hypotheses, scope items, or recommendations. Rendered as a styled list within the summary box.",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "text"
+                  ],
+                  "properties": {
+                    "text": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string"
+                      },
+                      "description": "Multilingual bullet text."
+                    },
+                    "sub_items": {
+                      "type": "array",
+                      "description": "Optional nested sub-points under this bullet.",
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "bullet_type": {
+                      "type": "string",
+                      "enum": [
+                        "hypothesis",
+                        "finding",
+                        "scope_item",
+                        "recommendation",
+                        "general"
+                      ],
+                      "default": "general",
+                      "description": "Semantic role of this bullet. hypothesis=audit hypothesis being tested. finding=key finding from the chapter. scope_item=scope or methodology point. recommendation=summary recommendation. general=untyped bullet."
+                    },
+                    "chapter_ref": {
+                      "type": "string",
+                      "description": "unit_id of the chapter or section this bullet corresponds to. e.g. 'AR06-CAG-2023-STATE-MP-CH02'. Enables deep-linking from exec summary bullets to their source chapters."
+                    },
+                    "footnote_markers": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "description": "Footnote marker symbols anchored to this bullet."
+                    }
+                  }
+                }
+              },
+              "display_style": {
+                "type": "string",
+                "enum": [
+                  "box",
+                  "inline",
+                  "banner"
+                ],
+                "default": "box",
+                "description": "Rendering hint for the viewer. box=visually distinct bordered/shaded container (default). inline=flows as regular content without a container. banner=full-width prominent header treatment."
               }
             }
           }

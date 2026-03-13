@@ -55,43 +55,112 @@ def get_openai_client():
     return OpenAI(api_key=api_key)
 
 
+def _multilingual_str(obj) -> str:
+    """Extract English text from a multilingual {lang: str} object, or return str as-is."""
+    if isinstance(obj, dict):
+        return obj.get("en") or next(iter(obj.values()), "")
+    return str(obj) if obj else ""
+
+
 def build_embedding_text(block: dict) -> str:
     """
-    Concatenate meaningful text fields from a content block.
-    Order: heading > subheading > paragraph text > table cells > list items.
+    Concatenate meaningful text fields from a content block for embedding.
+
+    Dispatch order:
+      executive_summary_block — title + paragraphs[] + bullets[]
+      paragraph               — content.text
+      heading                 — content.text
+      list                    — content.items[]
+      table                   — headers + first 10 rows
+      callout / sidebar       — content.title + content.text
+      image / figure / map    — content.caption + content.alt_text
+      (fallback)              — content.text if present
     """
     parts = []
+    block_type = block.get("block_type", "")
+    content = block.get("content", {})
+
+    # ── top-level heading/subheading fields (legacy; not in current schema) ──
     if heading := block.get("heading"):
         parts.append(heading)
     if subheading := block.get("subheading"):
         parts.append(subheading)
 
-    content = block.get("content", {})
-    if text := content.get("text"):
-        if isinstance(text, dict):
-            # multilingual — prefer English, fall back to first available
-            t = text.get("en") or next(iter(text.values()), "")
-            parts.append(t)
-        else:
-            parts.append(str(text))
+    # ── dispatch by block_type ────────────────────────────────────────────────
 
-    if table := content.get("table"):
-        headers = table.get("headers", [])
-        if headers:
-            parts.append(" | ".join(str(h) for h in headers))
-        for row in table.get("rows", [])[:10]:
-            parts.append(" | ".join(str(c) for c in row.get("cells", [])))
-
-    for item in content.get("items", [])[:20]:
-        if isinstance(item, dict):
-            item_text = item.get("text", {})
-            if isinstance(item_text, dict):
-                t = item_text.get("en") or next(iter(item_text.values()), "")
+    if block_type == "executive_summary_block":
+        # title
+        if title := content.get("title"):
+            parts.append(_multilingual_str(title))
+        # prose paragraphs
+        for para in content.get("paragraphs", []):
+            t = _multilingual_str(para)
+            if t:
                 parts.append(t)
-            elif isinstance(item_text, str):
-                parts.append(item_text)
-        elif isinstance(item, str):
-            parts.append(item)
+        # structured bullets — include text and any sub_items
+        for bullet in content.get("bullets", []):
+            t = _multilingual_str(bullet.get("text", {}))
+            if t:
+                parts.append(t)
+            for sub in bullet.get("sub_items", []):
+                s = _multilingual_str(sub)
+                if s:
+                    parts.append(s)
+
+    elif block_type in ("paragraph", "heading", "pullquote", "quote"):
+        if text := content.get("text"):
+            parts.append(_multilingual_str(text))
+
+    elif block_type in ("callout", "sidebar"):
+        if title := content.get("title"):
+            parts.append(_multilingual_str(title))
+        if text := content.get("text"):
+            parts.append(_multilingual_str(text))
+
+    elif block_type == "list":
+        for item in content.get("items", [])[:20]:
+            if isinstance(item, dict):
+                t = _multilingual_str(item.get("text", {}))
+                if t:
+                    parts.append(t)
+                for sub in item.get("sub_items", []):
+                    s = _multilingual_str(sub)
+                    if s:
+                        parts.append(s)
+            elif isinstance(item, str):
+                parts.append(item)
+
+    elif block_type == "table":
+        # dataset_ref-based tables have no inline rows here; fall through
+        if table := content.get("table"):
+            headers = table.get("headers", [])
+            if headers:
+                parts.append(" | ".join(str(h) for h in headers))
+            for row in table.get("rows", [])[:10]:
+                parts.append(" | ".join(str(c) for c in row.get("cells", [])))
+        if caption := content.get("caption"):
+            parts.append(_multilingual_str(caption))
+
+    elif block_type in ("image", "figure", "map", "chart"):
+        if caption := content.get("caption"):
+            parts.append(_multilingual_str(caption))
+        if alt := content.get("alt_text"):
+            parts.append(_multilingual_str(alt))
+
+    elif block_type == "audit_finding":
+        for field in ("title", "observation", "effect", "cause", "recommendation"):
+            val = content.get(field)
+            if val:
+                parts.append(_multilingual_str(val))
+
+    elif block_type == "recommendation":
+        if text := content.get("text"):
+            parts.append(_multilingual_str(text))
+
+    else:
+        # generic fallback — grab content.text if it exists
+        if text := content.get("text"):
+            parts.append(_multilingual_str(text))
 
     return "\n".join(p for p in parts if p).strip()
 
