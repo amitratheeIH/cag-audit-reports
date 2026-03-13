@@ -1,0 +1,50 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Product Schema",
+  "description": "Base container schema for all repository products. References component schemas for metadata, structure, and datasets.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "product"
+  ],
+  "properties": {
+    "product": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "metadata",
+        "structure"
+      ],
+      "properties": {
+        "metadata": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "common"
+          ],
+          "properties": {
+            "common": {
+              "$ref": "./common_metadata.schema",
+              "description": "Fields common to all product types."
+            },
+            "specific": {
+              "type": "object",
+              "description": "Product-type-specific metadata. For audit_report, validated against audit_report_metadata.schema."
+            }
+          }
+        },
+        "structure": {
+          "$ref": "./structure.schema"
+        },
+        "datasets": {
+          "type": "array",
+          "description": "Structured datasets extracted from tables within this report.",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    }
+  },
+  "$version": "2.1"
+}

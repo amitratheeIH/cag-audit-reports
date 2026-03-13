@@ -1,0 +1,39 @@
+name: Validate
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          pip install jsonschema referencing fastjsonschema check-jsonschema
+
+      - name: Sync product_type enum (check mode)
+        run: python scripts/sync_product_type_enum.py --check
+
+      - name: Check registry integrity
+        run: python scripts/check_registry_integrity.py
+
+      - name: Validate registry references
+        run: python scripts/validate_registry_refs.py
+
+      - name: Validate all report manifests
+        run: python scripts/validate_report.py --all
+
+      - name: Bump schema versions (dry-run)
+        run: python scripts/bump_schema_versions.py --dry-run

@@ -1,0 +1,655 @@
+{
+  "$version": "1.0",
+  "description": "Controlled vocabulary for report_sector field in inheritable_audit_metadata.schema. Describes the administrative and functional domain of government being audited. Maps to CAG's own audit wing structure. Two levels: sector (top-level CAG wing) and sub_sector (functional domain within the wing). A report or chapter may carry multiple sub-sectors when findings span more than one domain. IDs are stable and never renamed.",
+  "usage_notes": [
+    "Set sector at report level. Set sub_sector at report level for uniform reports, or override at chapter level for collection reports where chapters cover different domains.",
+    "A report may carry multiple sub_sector values but should have only one sector value unless it genuinely spans two CAG wings (rare — use combined_sector note in that case).",
+    "Civil is the residual sector — if a domain does not fit Commercial, Revenue, Defence, Telecom, or Railways, it belongs under Civil.",
+    "Commercial covers audit of entities (PSUs, autonomous bodies), not the commercial activities of line departments.",
+    "Revenue covers audit of government receipts — direct and indirect taxes, non-tax revenue. Not to be confused with the Department of Revenue (an entity).",
+    "Sub-sector IDs are prefixed with the parent sector ID for readability e.g. SECT-CIVIL-HEALTH."
+  ],
+  "entries": [
+    {
+      "id": "SECT-CIVIL",
+      "label": {
+        "en": "Civil",
+        "hi": "सिविल"
+      },
+      "short_label": {
+        "en": "Civil"
+      },
+      "level": "sector",
+      "parent_id": null,
+      "cag_wing": "Civil Audit",
+      "description": {
+        "en": "Audit of civil government expenditure — all non-commercial, non-defence, non-revenue, non-telecom, non-railways government spending. The broadest CAG audit stream covering social sector, infrastructure, and general administration."
+      },
+      "deprecated": false
+    },
+    {
+      "id": "SECT-COMMERCIAL",
+      "label": {
+        "en": "Commercial",
+        "hi": "वाणिज्यिक"
+      },
+      "short_label": {
+        "en": "Commercial"
+      },
+      "level": "sector",
+      "parent_id": null,
+      "cag_wing": "Commercial Audit",
+      "description": {
+        "en": "Audit of commercial entities — government companies, PSUs, statutory corporations, autonomous bodies, and externally aided projects. Distinct from civil audit of line department expenditure."
+      },
+      "deprecated": false,
+      "sub_sectors": [
+        "SECT-COMM-PSU-CENTRAL",
+        "SECT-COMM-PSU-STATE",
+        "SECT-COMM-AUTONOMOUS",
+        "SECT-COMM-EAP"
+      ]
+    },
+    {
+      "id": "SECT-COMM-PSU-CENTRAL",
+      "label": {
+        "en": "Central Public Sector Undertakings",
+        "hi": "केंद्रीय सार्वजनिक उपक्रम"
+      },
+      "short_label": {
+        "en": "Central PSUs"
+      },
+      "level": "sub_sector",
+      "parent_id": "SECT-COMMERCIAL",
+      "description": {
+        "en": "Audit of central government companies and corporations under Section 19 and 19A of the DPC Act. Covers Navratna, Miniratna, and other central PSUs across all sectors."
+      },
+      "deprecated": false
+    },
+    {
+      "id": "SECT-COMM-PSU-STATE",
+      "label": {
+        "en": "State Public Sector Undertakings",
+        "hi": "राज्य सार्वजनिक उपक्रम"
+      },
+      "short_label": {
+        "en": "State PSUs"
+      },
+      "level": "sub_sector",
+      "parent_id": "SECT-COMMERCIAL",
+      "description": {
+        "en": "Audit of state government companies, state electricity boards, state transport corporations, and other state commercial entities under Section 19 of the DPC Act."
+      },
+      "deprecated": false
+    },
+    {
+      "id": "SECT-COMM-AUTONOMOUS",
+      "label": {
+        "en": "Autonomous Bodies and Statutory Corporations",
+        "hi": "स्वायत्त निकाय और सांविधिक निगम"
+      },
+      "short_label": {
+        "en": "Autonomous Bodies"
+      },
+      "level": "sub_sector",
+      "parent_id": "SECT-COMMERCIAL",
+      "description": {
+        "en": "Audit of grant-in-aid bodies, autonomous institutions, and statutory corporations under Sections 14, 15, and 20 of the DPC Act. Covers universities, research bodies, development authorities."
+      },
+      "deprecated": false
+    },
+    {
+      "id": "SECT-COMM-EAP",
+      "label": {
+        "en": "Externally Aided Projects",
+        "hi": "बाह्य सहायता प्राप्त परियोजनाएं"
+      },
+      "short_label": {
+        "en": "Externally Aided Projects"
+      },
+      "level": "sub_sector",
+      "parent_id": "SECT-COMMERCIAL",
+      "description": {
+        "en": "Certification and audit of projects funded by World Bank, ADB, JICA, DFID, and other bilateral/multilateral agencies. Conducted under loan agreement requirements. Uses Section 20 DPC Act authority."
+      },
+      "deprecated": false
+    },
+    {
+      "id": "SECT-REVENUE",
+      "label": {
+        "en": "Revenue",
+        "hi": "राजस्व"
+      },
+      "short_label": {
+        "en": "Revenue"
+      },
+      "level": "sector",
+      "parent_id": null,
+      "cag_wing": "Revenue Audit",
+      "description": {
+        "en": "Audit of government receipts — direct taxes, indirect taxes, state taxes, non-tax revenue, and receipts administration. Distinct from the Department of Revenue (an entity). Conducted primarily under Section 16 of the DPC Act."
+      },
+      "deprecated": false,
+      "sub_sectors": [
+        "SECT-REV-DIRECT-TAX",
+        "SECT-REV-INDIRECT-TAX",
+        "SECT-REV-STATE-TAX",
+        "SECT-REV-NON-TAX",
+        "SECT-REV-RECEIPTS-ADMIN"
+      ]
+    },
+    {
+      "id": "SECT-REV-DIRECT-TAX",
+      "label": {
+        "en": "Direct Taxes",
+        "hi": "प्रत्यक्ष कर"
+      },
+      "short_label": {
+        "en": "Direct Taxes"
+      },
+      "level": "sub_sector",
+      "parent_id": "SECT-REVENUE",
+      "description": {
+        "en": "Income tax, corporate tax, and other direct taxes administered by CBDT. Covers assessment irregularities, tax demand non-recovery, TDS compliance, and exemption claims."
+      },
+      "deprecated": false
+    },
+    {
+      "id": "SECT-REV-INDIRECT-TAX",
+      "label": {
+        "en": "Indirect Taxes — GST, Customs and Central Excise",
+        "hi": "अप्रत्यक्ष कर — जीएसटी, सीमा शुल्क और केंद्रीय उत्पाद शुल्क"
+      },
+      "short_label": {
+        "en": "Indirect Taxes"
+      },
+      "level": "sub_sector",
+      "parent_id": "SECT-REVENUE",
+      "description": {
+        "en": "GST, customs duty, and central excise administered by CBIC. Covers classification errors, duty short-levy, refund irregularities, ITC fraud, and import valuation."
+      },
+      "deprecated": false
+    },
+    {
+      "id": "SECT-REV-STATE-TAX",
+      "label": {
+        "en": "State Taxes — VAT, Stamp Duty and State Excise",
+        "hi": "राज्य कर — वैट, स्टाम्प शुल्क और राज्य आबकारी"
+      },
+      "short_label": {
+        "en": "State Taxes"
+      },
+      "level": "sub_sector",
+      "parent_id": "SECT-REVENUE",
+      "description": {
+        "en": "State-administered taxes including VAT (pre-GST), stamp duty, registration fees, state excise (liquor), entertainment tax, and professional tax. Covers under-assessment, evasion, and revenue leakage in state commercial taxes."
+      },
+      "deprecated": false
+    },
+    {
+      "id": "SECT-REV-NON-TAX",
+      "label": {
+        "en": "Non-Tax Revenue",
+        "hi": "गैर-कर राजस्व"
+      },
+      "short_label": {
+        "en": "Non-Tax Revenue"
+      },
+      "level": "sub_sector",
+      "parent_id": "SECT-REVENUE",
+      "description": {
+        "en": "Royalties, dividends, fees, fines, spectrum charges, mining levies, and other non-tax government receipts. Covers short-collection of royalties, non-remittance of dividends, fee waiver irregularities."
+      },
+      "deprecated": false
+    },
+    {
+      "id": "SECT-REV-RECEIPTS-ADMIN",
+      "label": {
+        "en": "Receipts Administration and Refunds",
+        "hi": "प्राप्तियों का प्रशासन और वापसी"
+      },
+      "short_label": {
+        "en": "Receipts Administration"
+      },
+      "level": "sub_sector",
+      "parent_id": "SECT-REVENUE",
+      "description": {
+        "en": "Cross-cutting audit of receipts administration systems, refund mechanisms, reconciliation of receipts, and treasury operations. Residual revenue sub-sector for systemic receipts audits not covered by tax-specific sub-sectors."
+      },
+      "deprecated": false
+    },
+    {
+      "id": "SECT-DEFENCE",
+      "label": {
+        "en": "Defence",
+        "hi": "रक्षा"
+      },
+      "short_label": {
+        "en": "Defence"
+      },
+      "level": "sector",
+      "parent_id": null,
+      "cag_wing": "Defence Audit",
+      "description": {
+        "en": "Audit of defence services — Army, Navy, Air Force, ordnance factories, defence procurement, and coast guard. Conducted by the dedicated Defence Audit wing of CAG."
+      },
+      "deprecated": false,
+      "sub_sectors": [
+        "SECT-DEF-ARMY",
+        "SECT-DEF-NAVY",
+        "SECT-DEF-AIRFORCE",
+        "SECT-DEF-ORDNANCE",
+        "SECT-DEF-PROCUREMENT",
+        "SECT-DEF-COAST-GUARD"
+      ]
+    },
+    {
+      "id": "SECT-DEF-ARMY",
+      "label": {
+        "en": "Army",
+        "hi": "थल सेना"
+      },
+      "short_label": {
+        "en": "Army"
+      },
+      "level": "sub_sector",
+      "parent_id": "SECT-DEFENCE",
+      "description": {
+        "en": "Audit of Indian Army — expenditure on personnel, equipment, stores, construction, and operations."
+      },
+      "deprecated": false
+    },
+    {
+      "id": "SECT-DEF-NAVY",
+      "label": {
+        "en": "Navy",
+        "hi": "नौसेना"
+      },
+      "short_label": {
+        "en": "Navy"
+      },
+      "level": "sub_sector",
+      "parent_id": "SECT-DEFENCE",
+      "description": {
+        "en": "Audit of Indian Navy — ships, submarines, naval bases, equipment procurement, and naval aviation."
+      },
+      "deprecated": false
+    },
+    {
+      "id": "SECT-DEF-AIRFORCE",
+      "label": {
+        "en": "Air Force",
+        "hi": "वायु सेना"
+      },
+      "short_label": {
+        "en": "Air Force"
+      },
+      "level": "sub_sector",
+      "parent_id": "SECT-DEFENCE",
+      "description": {
+        "en": "Audit of Indian Air Force — aircraft, missiles, air bases, and aerospace equipment procurement and maintenance."
+      },
+      "deprecated": false
+    },
+    {
+      "id": "SECT-DEF-ORDNANCE",
+      "label": {
+        "en": "Defence Ordnance and Factories",
+        "hi": "रक्षा आयुध और कारखाने"
+      },
+      "short_label": {
+        "en": "Ordnance"
+      },
+      "level": "sub_sector",
+      "parent_id": "SECT-DEFENCE",
+      "description": {
+        "en": "Audit of ordnance factories, ammunition production, and defence manufacturing. Covers OFB (now restructured into DPSUs) and associated procurement."
+      },
+      "deprecated": false
+    },
+    {
+      "id": "SECT-DEF-PROCUREMENT",
+      "label": {
+        "en": "Defence Finance and Procurement",
+        "hi": "रक्षा वित्त और खरीद"
+      },
+      "short_label": {
+        "en": "Defence Procurement"
+      },
+      "level": "sub_sector",
+      "parent_id": "SECT-DEFENCE",
+      "description": {
+        "en": "Cross-service audit of defence capital procurement, Defence Acquisition Procedure compliance, offset obligations, and defence finance management."
+      },
+      "deprecated": false
+    },
+    {
+      "id": "SECT-DEF-COAST-GUARD",
+      "label": {
+        "en": "Coast Guard",
+        "hi": "तटरक्षक बल"
+      },
+      "short_label": {
+        "en": "Coast Guard"
+      },
+      "level": "sub_sector",
+      "parent_id": "SECT-DEFENCE",
+      "description": {
+        "en": "Audit of Indian Coast Guard — vessels, equipment, coastal surveillance infrastructure, and operational expenditure."
+      },
+      "deprecated": false
+    },
+    {
+      "id": "SECT-TELECOM",
+      "label": {
+        "en": "Telecommunications",
+        "hi": "दूरसंचार"
+      },
+      "short_label": {
+        "en": "Telecom"
+      },
+      "level": "sector",
+      "parent_id": null,
+      "cag_wing": "Telecom Audit",
+      "description": {
+        "en": "Audit of the telecommunications sector — Department of Telecommunications, telecom PSUs, spectrum management, and IT/digital infrastructure. CAG has a dedicated Telecom Audit wing given the sector's fiscal scale."
+      },
+      "deprecated": false,
+      "sub_sectors": [
+        "SECT-TEL-DOT",
+        "SECT-TEL-PSU",
+        "SECT-TEL-SPECTRUM",
+        "SECT-TEL-DIGITAL"
+      ]
+    },
+    {
+      "id": "SECT-TEL-DOT",
+      "label": {
+        "en": "Department of Telecommunications",
+        "hi": "दूरसंचार विभाग"
+      },
+      "short_label": {
+        "en": "DoT"
+      },
+      "level": "sub_sector",
+      "parent_id": "SECT-TELECOM",
+      "description": {
+        "en": "Audit of DoT expenditure, licensing revenue, universal service obligation fund, and telecom policy implementation."
+      },
+      "deprecated": false
+    },
+    {
+      "id": "SECT-TEL-PSU",
+      "label": {
+        "en": "Telecom PSUs — BSNL and MTNL",
+        "hi": "दूरसंचार सार्वजनिक उपक्रम — बीएसएनएल और एमटीएनएल"
+      },
+      "short_label": {
+        "en": "Telecom PSUs"
+      },
+      "level": "sub_sector",
+      "parent_id": "SECT-TELECOM",
+      "description": {
+        "en": "Audit of BSNL and MTNL — financial performance, network investment, VRS implementation, and restructuring plans."
+      },
+      "deprecated": false
+    },
+    {
+      "id": "SECT-TEL-SPECTRUM",
+      "label": {
+        "en": "Spectrum and Licensing",
+        "hi": "स्पेक्ट्रम और लाइसेंसिंग"
+      },
+      "short_label": {
+        "en": "Spectrum"
+      },
+      "level": "sub_sector",
+      "parent_id": "SECT-TELECOM",
+      "description": {
+        "en": "Audit of spectrum allocation, auction processes, licence fee collection, and revenue share from telecom operators. Includes the landmark 2G spectrum audit."
+      },
+      "deprecated": false
+    },
+    {
+      "id": "SECT-TEL-DIGITAL",
+      "label": {
+        "en": "IT and Digital Infrastructure",
+        "hi": "आईटी और डिजिटल अवसंरचना"
+      },
+      "short_label": {
+        "en": "Digital Infrastructure"
+      },
+      "level": "sub_sector",
+      "parent_id": "SECT-TELECOM",
+      "description": {
+        "en": "Audit of national digital infrastructure — BharatNet, common service centres, digital payment systems, and e-governance platforms when audited under the Telecom wing."
+      },
+      "deprecated": false
+    },
+    {
+      "id": "SECT-RAILWAYS",
+      "label": {
+        "en": "Railways",
+        "hi": "रेलवे"
+      },
+      "short_label": {
+        "en": "Railways"
+      },
+      "level": "sector",
+      "parent_id": null,
+      "cag_wing": "Railway Audit",
+      "description": {
+        "en": "Audit of Indian Railways — the dedicated Railway Audit wing of CAG. Covers all railway zones, production units, construction projects, and railway PSUs. Indian Railways has a separate budget and distinct accounting structure warranting its own CAG audit wing."
+      },
+      "deprecated": false,
+      "sub_sectors": [
+        "SECT-RAIL-OPERATIONS",
+        "SECT-RAIL-CONSTRUCTION",
+        "SECT-RAIL-PROCUREMENT",
+        "SECT-RAIL-PSU",
+        "SECT-RAIL-FINANCE"
+      ]
+    },
+    {
+      "id": "SECT-RAIL-OPERATIONS",
+      "label": {
+        "en": "Railway Operations",
+        "hi": "रेलवे परिचालन"
+      },
+      "short_label": {
+        "en": "Operations"
+      },
+      "level": "sub_sector",
+      "parent_id": "SECT-RAILWAYS",
+      "description": {
+        "en": "Audit of day-to-day railway operations — passenger and freight services, revenue collection, ticketing systems, station and yard operations across all railway zones."
+      },
+      "deprecated": false
+    },
+    {
+      "id": "SECT-RAIL-CONSTRUCTION",
+      "label": {
+        "en": "Railway Construction and New Lines",
+        "hi": "रेलवे निर्माण और नई लाइनें"
+      },
+      "short_label": {
+        "en": "Construction"
+      },
+      "level": "sub_sector",
+      "parent_id": "SECT-RAILWAYS",
+      "description": {
+        "en": "Audit of new line construction, gauge conversion, doubling projects, electrification, and major infrastructure investment including dedicated freight corridors and high-speed rail."
+      },
+      "deprecated": false
+    },
+    {
+      "id": "SECT-RAIL-PROCUREMENT",
+      "label": {
+        "en": "Railway Procurement and Stores",
+        "hi": "रेलवे खरीद और भंडार"
+      },
+      "short_label": {
+        "en": "Procurement"
+      },
+      "level": "sub_sector",
+      "parent_id": "SECT-RAILWAYS",
+      "description": {
+        "en": "Audit of rolling stock procurement, track materials, signalling equipment, and stores management across railway production units and workshops."
+      },
+      "deprecated": false
+    },
+    {
+      "id": "SECT-RAIL-PSU",
+      "label": {
+        "en": "Railway PSUs and Entities",
+        "hi": "रेलवे सार्वजनिक उपक्रम और संस्थाएं"
+      },
+      "short_label": {
+        "en": "Railway PSUs"
+      },
+      "level": "sub_sector",
+      "parent_id": "SECT-RAILWAYS",
+      "description": {
+        "en": "Audit of railway public sector undertakings — IRCTC, IRFC, RITES, IRCON, CONCOR, DFCCIL, and other railway entities."
+      },
+      "deprecated": false
+    },
+    {
+      "id": "SECT-RAIL-FINANCE",
+      "label": {
+        "en": "Railway Finance and Accounts",
+        "hi": "रेलवे वित्त और लेखा"
+      },
+      "short_label": {
+        "en": "Railway Finance"
+      },
+      "level": "sub_sector",
+      "parent_id": "SECT-RAILWAYS",
+      "description": {
+        "en": "Audit of railway accounts, Appropriation Accounts, dividend payments to general revenues, pension fund, and railway finance management."
+      },
+      "deprecated": false
+    },
+    {
+      "id": "SECT-LOCAL-GOVT",
+      "label": {
+        "en": "Local Government",
+        "hi": "स्थानीय सरकार"
+      },
+      "short_label": {
+        "en": "Local Government"
+      },
+      "level": "sector",
+      "parent_id": null,
+      "cag_wing": "Local Bodies Audit",
+      "description": {
+        "en": "Audit of local self-government institutions — urban local bodies, panchayati raj institutions, cantonment boards, and autonomous governance structures under the Fifth and Sixth Schedules and PESA. Covers funds devolved by Union and State Finance Commissions, grants-in-aid to local bodies, and own-source revenue of local institutions."
+      },
+      "deprecated": false,
+      "sub_sectors": [
+        "SECT-LG-ULB",
+        "SECT-LG-PRI",
+        "SECT-LG-CANTONMENT",
+        "SECT-LG-PESA",
+        "SECT-LG-ADC",
+        "SECT-LG-REGIONAL-COUNCIL"
+      ]
+    },
+    {
+      "id": "SECT-LG-ULB",
+      "label": {
+        "en": "Urban Local Bodies",
+        "hi": "शहरी स्थानीय निकाय"
+      },
+      "short_label": {
+        "en": "Urban Local Bodies"
+      },
+      "level": "sub_sector",
+      "parent_id": "SECT-LOCAL-GOVT",
+      "description": {
+        "en": "Audit of municipal corporations, municipal councils, town panchayats, notified area committees, and special purpose vehicles of ULBs. Covers devolved funds under 74th Constitutional Amendment, own-source revenue, property tax, user charges, and centrally sponsored scheme funds flowing through urban local bodies (Smart City Mission, AMRUT, PMAY-U, SBM-U)."
+      },
+      "deprecated": false
+    },
+    {
+      "id": "SECT-LG-PRI",
+      "label": {
+        "en": "Panchayati Raj Institutions",
+        "hi": "पंचायती राज संस्थाएं"
+      },
+      "short_label": {
+        "en": "Panchayati Raj"
+      },
+      "level": "sub_sector",
+      "parent_id": "SECT-LOCAL-GOVT",
+      "description": {
+        "en": "Audit of gram panchayats, panchayat samitis, and zila parishads. Covers devolved funds under 73rd Constitutional Amendment, State Finance Commission grants, own-source revenue, and centrally sponsored scheme funds flowing through PRIs (MGNREGS, PMGSY, SBM-G, Jal Jeevan Mission at panchayat level). Excludes PESA-notified areas — see SECT-LG-PESA."
+      },
+      "deprecated": false
+    },
+    {
+      "id": "SECT-LG-CANTONMENT",
+      "label": {
+        "en": "Cantonment Boards",
+        "hi": "छावनी बोर्ड"
+      },
+      "short_label": {
+        "en": "Cantonment Boards"
+      },
+      "level": "sub_sector",
+      "parent_id": "SECT-LOCAL-GOVT",
+      "description": {
+        "en": "Audit of cantonment boards established under the Cantonments Act 2006. Cantonment boards are statutory local bodies functioning in military station areas under the administrative control of the Ministry of Defence. Covers civic services, own-source revenue, and central grants to cantonment areas."
+      },
+      "deprecated": false
+    },
+    {
+      "id": "SECT-LG-PESA",
+      "label": {
+        "en": "PESA Areas — Fifth Schedule Tribal Governance",
+        "hi": "पेसा क्षेत्र — पांचवीं अनुसूची जनजातीय शासन"
+      },
+      "short_label": {
+        "en": "PESA Areas"
+      },
+      "level": "sub_sector",
+      "parent_id": "SECT-LOCAL-GOVT",
+      "description": {
+        "en": "Audit of local governance in Scheduled Areas under the Panchayats (Extension to Scheduled Areas) Act 1996 — PESA. Covers gram sabha powers, tribal self-governance, management of natural resources (minor forest produce, minor minerals, water bodies), and flow of tribal sub-plan funds through PESA-notified gram panchayats in the ten PESA states (AP, Chhattisgarh, Gujarat, HP, JH, MP, MH, Odisha, Rajasthan, Telangana)."
+      },
+      "deprecated": false
+    },
+    {
+      "id": "SECT-LG-ADC",
+      "label": {
+        "en": "Autonomous District Councils — Sixth Schedule Areas",
+        "hi": "स्वायत्त जिला परिषद — छठी अनुसूची क्षेत्र"
+      },
+      "short_label": {
+        "en": "Autonomous District Councils"
+      },
+      "level": "sub_sector",
+      "parent_id": "SECT-LOCAL-GOVT",
+      "description": {
+        "en": "Audit of Autonomous District Councils (ADCs) established under the Sixth Schedule of the Constitution in Assam, Meghalaya, Tripura, and Mizoram. ADCs have legislative, executive, and judicial powers over tribal areas. Covers Bodoland Territorial Council, Karbi Anglong Autonomous Council, Garo Hills Autonomous District Council, Khasi Hills ADC, Jaintia Hills ADC, Chakma ADC, and others. Distinct from Regional Councils — see SECT-LG-REGIONAL-COUNCIL."
+      },
+      "deprecated": false
+    },
+    {
+      "id": "SECT-LG-REGIONAL-COUNCIL",
+      "label": {
+        "en": "Regional Councils — Sixth Schedule and Special Provisions",
+        "hi": "क्षेत्रीय परिषद — छठी अनुसूची और विशेष प्रावधान"
+      },
+      "short_label": {
+        "en": "Regional Councils"
+      },
+      "level": "sub_sector",
+      "parent_id": "SECT-LOCAL-GOVT",
+      "description": {
+        "en": "Audit of Regional Councils under the Sixth Schedule (sub-divisions of Autonomous Districts) and councils with special constitutional or statutory status — including the Ladakh Autonomous Hill Development Councils (Leh and Kargil), Darjeeling Gorkha Hill Council, and similar bodies with devolved governance powers. Distinct from Autonomous District Councils — see SECT-LG-ADC."
+      },
+      "deprecated": false
+    }
+  ]
+}

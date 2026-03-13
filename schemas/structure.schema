@@ -1,0 +1,151 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$version": "3.2",
+  "title": "Report Structure Schema",
+  "description": "Document hierarchy: front_matter, content_units, back_matter. v3.2: executive_summary added to content_unit — multilingual unit-level summary for TOC preview, report reader headers, and unit-level vector search.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "front_matter": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/content_unit"
+      }
+    },
+    "content_units": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/content_unit"
+      }
+    },
+    "back_matter": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/content_unit"
+      }
+    }
+  },
+  "definitions": {
+    "content_unit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "unit_id",
+        "unit_type",
+        "title"
+      ],
+      "properties": {
+        "unit_id": {
+          "type": "string",
+          "pattern": "^[A-Z0-9][A-Z0-9\\-]+[A-Z0-9]$",
+          "description": "Stable unique ID for this unit. Recommended pattern: {report_id}-{type_prefix}{N}. e.g. AR01-CAG-2025-UT-JK-CH02, AR01-CAG-2025-UT-JK-CH02-SEC03"
+        },
+        "unit_type": {
+          "type": "string",
+          "enum": [
+            "preface",
+            "executive_summary",
+            "chapter",
+            "section",
+            "subsection",
+            "sub_subsection",
+            "appendix",
+            "annexure",
+            "statement",
+            "schedule"
+          ]
+        },
+        "seq": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Explicit display order within the parent unit. UNIT-SCOPED — seq is relative to siblings under the same parent, not report-level. Use decimal spacing (10, 20, 30...) to allow insertion without full renumbering: a unit inserted between seq 20 and 30 gets seq 25. Set and maintained by the ingestion pipeline. Together with unit_id unambiguously locates this unit in the tree regardless of file storage order or database retrieval order."
+        },
+        "title": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Multilingual unit title."
+        },
+        "executive_summary": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Multilingual executive summary for this unit (chapter or section). A short plain-language summary of the unit's key findings, scope, and outcome. Used in the portal TOC preview, report reader unit headers, and as the embedding text for unit-level vector search. Distinct from block-level executive_summary paragraphs — this is metadata on the unit, not a content block in the flow. e.g. { 'en': 'This chapter examines stamp duty collection in 12 districts...', 'hi': 'यह अध्याय 12 जिलों में स्टाम्प शुल्क संग्रह की जांच करता है...' }"
+        },
+        "slug": {
+          "type": "string",
+          "pattern": "^[a-z0-9\\-]+$",
+          "description": "URL-safe identifier for web publishing."
+        },
+        "para_number": {
+          "type": "string",
+          "description": "Official paragraph or section number as printed."
+        },
+        "toc_include": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether this unit appears in the Table of Contents. Default true. Typical defaults by unit_type: chapter=true, section=true, subsection=true, sub_subsection=false, appendix=true, annexure=false. Editorial override is permitted — set explicitly to suppress or force inclusion."
+        },
+        "taggable": {
+          "type": "boolean",
+          "default": false,
+          "description": "If true, this unit carries inheritable metadata tags that the ingestion pipeline should cascade to children."
+        },
+        "collapsible": {
+          "type": "boolean",
+          "default": true,
+          "description": "If true, viewer renders this unit with a collapse/expand toggle."
+        },
+        "default_collapsed": {
+          "type": "boolean",
+          "default": false,
+          "description": "If true, unit renders collapsed on page load. Useful for appendices, long annexures, sub_subsections."
+        },
+        "metadata_override_mode": {
+          "type": "string",
+          "enum": [
+            "merge",
+            "replace"
+          ],
+          "default": "merge",
+          "description": "Controls how this unit's metadata interacts with inherited parent metadata.\n  merge  — this unit's metadata combines with parent per the inheritance rules in inheritable_audit_metadata.schema $comment (additive fields merge, override fields replace).\n  replace — this unit's metadata is completely standalone. No inheritance applied. Use for chapters in omnibus reports that cover an unrelated audit context, department, or jurisdiction from the report-level metadata."
+        },
+        "metadata": {
+          "$ref": "./inheritable_audit_metadata.schema",
+          "description": "Unit-level metadata. Cascades to all descendant units and blocks per inheritance rules unless a descendant sets metadata_override_mode=replace."
+        },
+        "translation_status": {
+          "type": "object",
+          "additionalProperties": false,
+          "patternProperties": {
+            "^[a-z]{2,3}$": {
+              "type": "string",
+              "enum": [
+                "original",
+                "human_translated",
+                "machine_translated",
+                "pending",
+                "not_applicable"
+              ]
+            }
+          }
+        },
+        "references": {
+          "type": "array",
+          "items": {
+            "$ref": "./reference.schema"
+          }
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Ordered child unit_ids. Resolved within this file first, then from units/ folder. Order here is the canonical display order and should be consistent with seq values on child units."
+        }
+      }
+    }
+  }
+}

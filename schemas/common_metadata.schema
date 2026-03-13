@@ -1,0 +1,232 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Common Metadata Schema",
+  "description": "Metadata fields common to all product types in the repository. Text fields that are multilingual use objects keyed by ISO-639-1 language codes.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "product_id",
+    "product_type",
+    "title",
+    "year",
+    "default_language",
+    "languages"
+  ],
+  "properties": {
+    "product_id": {
+      "type": "string",
+      "pattern": "^[A-Z0-9][A-Z0-9\\-]+[A-Z0-9]$",
+      "description": "Unique stable identifier for this product. e.g. AR01-CAG-2025-UT-JK"
+    },
+    "product_type": {
+      "type": "string",
+      "enum": [
+        "audit_report",
+        "accounts_report",
+        "state_finance_report",
+        "study_report",
+        "audit_impact_report",
+        "other"
+      ]
+    },
+    "title": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "Full report title. Multilingual object keyed by ISO-639-1 code. e.g. { 'en': 'Report of the CAG...' }"
+    },
+    "subtitle": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "Subtitle or series designation. Multilingual."
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "One-paragraph plain-language summary of the report. Used as the search result snippet. Multilingual."
+    },
+    "description": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "Extended description. Longer than summary. Multilingual."
+    },
+    "year": {
+      "type": "integer",
+      "minimum": 1860,
+      "maximum": 2100,
+      "description": "Report year (year of publication / tabling)."
+    },
+    "languages": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z]{2,3}$",
+        "description": "ISO-639-1 (2-letter) or ISO-639-2 (3-letter) language code."
+      },
+      "minItems": 1,
+      "uniqueItems": true,
+      "description": "All languages in which this report is available. Ingestion pipeline must validate that all declared languages have content."
+    },
+    "default_language": {
+      "type": "string",
+      "pattern": "^[a-z]{2,3}$",
+      "description": "Primary authoring language. Used as fallback when a requested language is unavailable."
+    },
+    "keywords": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9\\-]+$",
+      "description": "URL-safe identifier for web publishing. e.g. cag-jk-revenue-2025"
+    },
+    "canonical_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Permanent public URL for this report."
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+$",
+      "description": "Schema version of this record. e.g. 1.0, 1.1"
+    },
+    "revision_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date this metadata record was last revised."
+    },
+    "archived_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date this record was moved to archival status."
+    },
+    "supersedes": {
+      "type": "string",
+      "description": "product_id of the earlier report this report supersedes or replaces."
+    },
+    "superseded_by": {
+      "type": "string",
+      "description": "product_id of the later report that supersedes this one. Set by the ingestion pipeline when a successor is published."
+    },
+    "citation": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "Multilingual. Recommended citation string for academic or legal reference."
+    },
+    "publisher": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "Multilingual. Publishing authority. e.g. {\"en\": \"Office of the Comptroller and Auditor General of India\", \"hi\": \"भारत के नियंत्रक-महालेखापरीक्षक का कार्यालय\"}"
+    },
+    "doi": {
+      "type": "string",
+      "description": "Digital Object Identifier if registered."
+    },
+    "distributions": {
+      "type": "array",
+      "description": "Downloadable versions of this report in various formats and languages.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "format",
+          "language",
+          "url"
+        ],
+        "properties": {
+          "format": {
+            "type": "string",
+            "enum": [
+              "pdf",
+              "epub",
+              "html",
+              "docx",
+              "odt"
+            ]
+          },
+          "language": {
+            "type": "string",
+            "pattern": "^[a-z]{2,3}$"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "size_mb": {
+            "type": "number",
+            "minimum": 0
+          },
+          "checksum": {
+            "type": "string",
+            "description": "SHA-256 checksum of the file for integrity verification."
+          },
+          "checksum_algorithm": {
+            "type": "string",
+            "enum": [
+              "sha256",
+              "sha512",
+              "md5"
+            ],
+            "default": "sha256"
+          }
+        }
+      }
+    },
+    "related_reports": {
+      "type": "array",
+      "description": "Editorial links to related reports (same scheme, entity, or theme). Distinct from programmatic cross-references.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "product_id",
+          "relationship_type"
+        ],
+        "properties": {
+          "product_id": {
+            "type": "string"
+          },
+          "relationship_type": {
+            "type": "string",
+            "enum": [
+              "same_entity",
+              "same_scheme",
+              "same_sector",
+              "prior_year",
+              "follow_up",
+              "companion"
+            ]
+          },
+          "label": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "references": {
+      "type": "array",
+      "items": {
+        "$ref": "./reference.schema"
+      }
+    }
+  },
+  "$version": "2.1"
+}

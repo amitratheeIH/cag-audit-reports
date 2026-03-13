@@ -1,0 +1,371 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$version": "3.2",
+  "title": "Action Taken Note (ATN) Schema",
+  "description": "Schema for ATN records stored in the atn/ folder of each report. v3.2: chapter_id is now optional at file level — report-level ATN files covering the whole report do not have a chapter_id. scope.required reduced to [level, report_id] — all other IDs are driven conditionally by allOf rules per level. level=report requires only report_id; level=chapter additionally requires chapter_id; level=section additionally requires chapter_id + unit_id; level=paragraph additionally requires chapter_id + unit_id + block_id + para_ref; level=multi_paragraph requires chapter_id + unit_id + block_ids[] + para_refs[].",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "report_id",
+    "atn_records"
+  ],
+  "properties": {
+    "report_id": {
+      "type": "string",
+      "pattern": "^[A-Z0-9][A-Z0-9\\-]+[A-Z0-9]$",
+      "description": "product_id of the parent report. e.g. AR06-CAG-2023-STATE-MP"
+    },
+    "chapter_id": {
+      "type": "string",
+      "pattern": "^[A-Z0-9][A-Z0-9\\-]+[A-Z0-9]$",
+      "description": "unit_id of the chapter this ATN file covers. Present for chapter-scoped ATN files (one file per chapter — the standard pattern). Omit for report-level ATN files where records cover the whole report. e.g. AR06-CAG-2023-STATE-MP-CH02"
+    },
+    "chapter_ref": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "Multilingual human-readable chapter reference as printed. e.g. { 'en': 'Chapter II — Stamp Duty and Registration Fees', 'hi': 'अध्याय II — स्टाम्प शुल्क' }"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 timestamp of last pipeline generation."
+    },
+    "atn_records": {
+      "type": "array",
+      "description": "ATN records for this chapter. Each record covers one accountability unit — a paragraph, section, the whole chapter, or a group of paragraphs. The scope object on each record declares the level and carries the relevant structural IDs.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "atn_id",
+          "scope",
+          "current_status"
+        ],
+        "properties": {
+          "atn_id": {
+            "type": "string",
+            "pattern": "^ATN-[A-Z0-9][A-Z0-9\\-]+[A-Z0-9]$",
+            "description": "Stable unique ID for this ATN record. Identifies the paragraph/section/chapter's full ATN lifecycle — never changes across rounds. e.g. ATN-AR06-CAG-2023-STATE-MP-CH02-001"
+          },
+          "scope": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "level",
+              "report_id"
+            ],
+            "description": "Declares the structural level at which this ATN record applies and carries the IDs needed to resolve it back to the report structure. level drives which additional fields are required. Validated by ingestion pipeline using if/then rules (JSON Schema if/then; MongoDB validates via pipeline only).",
+            "properties": {
+              "level": {
+                "type": "string",
+                "enum": [
+                  "report",
+                  "chapter",
+                  "section",
+                  "paragraph",
+                  "multi_paragraph"
+                ],
+                "description": "Structural level this ATN record covers. report=omnibus ATN covering the entire report (rare). chapter=government response or PAC examination at chapter level. section=consolidated ATN covering all findings within a section/sub-section. paragraph=standard per-paragraph ATN (most common). multi_paragraph=single consolidated ATN covering multiple related paragraphs."
+              },
+              "report_id": {
+                "type": "string",
+                "pattern": "^[A-Z0-9][A-Z0-9\\-]+[A-Z0-9]$",
+                "description": "product_id of the report. Always required."
+              },
+              "chapter_id": {
+                "type": "string",
+                "pattern": "^[A-Z0-9][A-Z0-9\\-]+[A-Z0-9]$",
+                "description": "unit_id of the chapter. Required for all levels except report."
+              },
+              "unit_id": {
+                "type": "string",
+                "pattern": "^[A-Z0-9][A-Z0-9\\-]+[A-Z0-9]$",
+                "description": "unit_id of the section or sub-section this ATN covers. Required when level=section. For level=paragraph or multi_paragraph, this is the containing section — useful for grouping and navigation."
+              },
+              "block_id": {
+                "type": "string",
+                "pattern": "^[A-Z0-9][A-Z0-9\\-]+[A-Z0-9]$",
+                "description": "block_id of the primary audit_finding or observation block. Required when level=paragraph."
+              },
+              "block_ids": {
+                "type": "array",
+                "minItems": 2,
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "pattern": "^[A-Z0-9][A-Z0-9\\-]+[A-Z0-9]$"
+                },
+                "description": "block_ids of all audit_finding blocks covered by this ATN record. Required when level=multi_paragraph. Must contain at least 2 entries."
+              },
+              "recommendation_block_id": {
+                "type": "string",
+                "pattern": "^[A-Z0-9][A-Z0-9\\-]+[A-Z0-9]$",
+                "description": "block_id of the associated recommendation block. Applicable when level=paragraph. Enables tracking recommendation implementation separately from the observation."
+              },
+              "recommendation_block_ids": {
+                "type": "array",
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "pattern": "^[A-Z0-9][A-Z0-9\\-]+[A-Z0-9]$"
+                },
+                "description": "block_ids of recommendation blocks for all covered paragraphs. Applicable when level=multi_paragraph."
+              },
+              "para_ref": {
+                "type": "string",
+                "pattern": "^[0-9]+(\\.[0-9]+)*$",
+                "description": "Official paragraph number as printed. e.g. '2.3.1'. Required when level=paragraph. Human-facing reference used in PAC proceedings and government correspondence."
+              },
+              "para_refs": {
+                "type": "array",
+                "minItems": 2,
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "pattern": "^[0-9]+(\\.[0-9]+)*$"
+                },
+                "description": "All paragraph numbers covered by this consolidated ATN. Required when level=multi_paragraph."
+              },
+              "section_ref": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "description": "Multilingual human-readable section reference as printed. Used when level=section or chapter. e.g. { 'en': 'Section 2.3 — Non-recovery of stamp duty', 'hi': 'अनुभाग 2.3' }"
+              }
+            },
+            "allOf": [
+              {
+                "description": "level=chapter requires chapter_id.",
+                "if": {
+                  "properties": {
+                    "level": {
+                      "const": "chapter"
+                    }
+                  },
+                  "required": [
+                    "level"
+                  ]
+                },
+                "then": {
+                  "required": [
+                    "chapter_id"
+                  ]
+                }
+              },
+              {
+                "description": "level=section requires chapter_id and unit_id.",
+                "if": {
+                  "properties": {
+                    "level": {
+                      "const": "section"
+                    }
+                  },
+                  "required": [
+                    "level"
+                  ]
+                },
+                "then": {
+                  "required": [
+                    "chapter_id",
+                    "unit_id"
+                  ]
+                }
+              },
+              {
+                "description": "level=paragraph requires chapter_id, unit_id, block_id, and para_ref.",
+                "if": {
+                  "properties": {
+                    "level": {
+                      "const": "paragraph"
+                    }
+                  },
+                  "required": [
+                    "level"
+                  ]
+                },
+                "then": {
+                  "required": [
+                    "chapter_id",
+                    "unit_id",
+                    "block_id",
+                    "para_ref"
+                  ]
+                }
+              },
+              {
+                "description": "level=multi_paragraph requires chapter_id, unit_id, block_ids[], and para_refs[].",
+                "if": {
+                  "properties": {
+                    "level": {
+                      "const": "multi_paragraph"
+                    }
+                  },
+                  "required": [
+                    "level"
+                  ]
+                },
+                "then": {
+                  "required": [
+                    "chapter_id",
+                    "unit_id",
+                    "block_ids",
+                    "para_refs"
+                  ]
+                }
+              }
+            ]
+          },
+          "department": {
+            "type": "string",
+            "description": "entity_id of the primary department responsible for this ATN. The department that owns accountability for this paragraph/section/chapter."
+          },
+          "current_status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "received",
+              "under_review",
+              "partially_implemented",
+              "implemented",
+              "not_implemented",
+              "not_accepted",
+              "settled"
+            ],
+            "description": "Current ATN status — always reflects the outcome of the latest round. pending=no ATN received yet. received=ATN received, not yet assessed. under_review=audit office is assessing. partially_implemented=some action taken, not complete. implemented=fully implemented. not_implemented=no action taken. not_accepted=government disputes the finding. settled=audit office satisfied, closed."
+          },
+          "current_round": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Round number of the latest exchange. 0 means no rounds yet (status is pending). Always equals the length of rounds[]. Set by ingestion pipeline."
+          },
+          "settled_date": {
+            "type": "string",
+            "format": "date",
+            "description": "Date the paragraph/section/chapter was formally settled. Set only when current_status=settled."
+          },
+          "pac_reference": {
+            "type": "string",
+            "description": "PAC committee report reference if this ATN scope was examined by PAC. e.g. '5th Report of PAC (2025-26)'."
+          },
+          "follow_up_report_id": {
+            "type": "string",
+            "pattern": "^[A-Z0-9][A-Z0-9\\-]+[A-Z0-9]$",
+            "description": "product_id of a follow-up audit report that revisited this finding. Creates the cross-report accountability chain."
+          },
+          "rounds": {
+            "type": "array",
+            "description": "Full exchange history. One entry per ATN round — each round is one government response and the audit office's assessment of it. Round 1 is the initial government response. Round 2 is their follow-up after audit office found Round 1 inadequate. And so on. Order by round_number ascending. status_after_round of the last entry must match current_status.",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "round_number",
+                "round_type",
+                "atn_date",
+                "atn_reference",
+                "atn_text",
+                "status_after_round"
+              ],
+              "properties": {
+                "round_number": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "description": "Sequential round number starting at 1."
+                },
+                "round_type": {
+                  "type": "string",
+                  "enum": [
+                    "initial",
+                    "follow_up",
+                    "pac_directed",
+                    "revised",
+                    "final"
+                  ],
+                  "description": "initial=government's first ATN response. follow_up=subsequent response after audit office found previous round inadequate. pac_directed=response submitted at PAC's direction. revised=government revised their earlier position. final=round that resulted in settlement."
+                },
+                "department": {
+                  "type": "string",
+                  "description": "entity_id of the department that submitted this round. May differ from record-level department if accountability transferred between departments."
+                },
+                "atn_date": {
+                  "type": "string",
+                  "format": "date",
+                  "description": "Date the government submitted this round's ATN response."
+                },
+                "atn_reference": {
+                  "type": "string",
+                  "description": "File or letter reference of the government's ATN submission. e.g. 'REV/ATN/2024/156'"
+                },
+                "atn_text": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "description": "Full text of the government's response for this round. Multilingual."
+                },
+                "audit_office_assessment": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "description": "Audit office assessment of this round — whether action is adequate, partial, or unsatisfactory. Multilingual. Optional while assessment is still pending."
+                },
+                "assessed_by": {
+                  "type": "string",
+                  "description": "Office that assessed this round. e.g. 'AG-MP', 'CAG-HQ'."
+                },
+                "assessment_date": {
+                  "type": "string",
+                  "format": "date",
+                  "description": "Date the audit office completed its assessment of this round."
+                },
+                "status_after_round": {
+                  "type": "string",
+                  "enum": [
+                    "pending",
+                    "received",
+                    "under_review",
+                    "partially_implemented",
+                    "implemented",
+                    "not_implemented",
+                    "not_accepted",
+                    "settled"
+                  ],
+                  "description": "ATN status as determined after assessment of this round. The status_after_round of the last round must match the record-level current_status — enforced by ingestion pipeline."
+                },
+                "pac_sitting_reference": {
+                  "type": "string",
+                  "description": "PAC sitting reference if this round was submitted during or in response to a PAC sitting. e.g. '3rd Sitting, 14th PAC (2024-25)'"
+                },
+                "notes": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "description": "Multilingual internal notes on this round."
+                }
+              }
+            }
+          },
+          "notes": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "Multilingual notes at the record level — applicable across all rounds. e.g. recurring non-compliance patterns, escalation history, inter-departmental disputes."
+          },
+          "references": {
+            "type": "array",
+            "items": {
+              "$ref": "./reference.schema"
+            },
+            "description": "Cross-references from this ATN record to related blocks, reports, datasets, or external sources."
+          }
+        }
+      }
+    }
+  }
+}

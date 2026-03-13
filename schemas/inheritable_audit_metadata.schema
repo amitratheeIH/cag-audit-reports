@@ -1,0 +1,422 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$version": "3.6",
+  "$comment": "INHERITANCE RULES — read before implementing pipeline cascade logic.\n\nSCOPE: This schema is applied at two levels only:\n  1. report level  — via audit_report_metadata.schema > inheritable field\n  2. unit level    — via structure.schema > content_unit > metadata field\n  Blocks do NOT carry this schema. Blocks use the scoped block_metadata field in content_block.schema for the three fields that have paragraph-level editorial value.\n\nARRAY INHERITANCE SEMANTICS — every array field is labelled:\n\n  ADDITIVE (child values merge with parent, deduplicating by value):\n    impact[]               — child impacts aggregate upward, never replaced\n    regions.states_uts     — child adds geographic specificity to parent\n    regions.ulbs           — additive, fill only when directly relevant\n    regions.pris           — additive, fill only when directly relevant\n    referenced_entities[]  — flat union, deduplication by entity_id\n    primary_schemes[]      — additive across levels\n    other_schemes[]        — additive across levels\n\n  OVERRIDE (child value completely replaces parent for that unit and descendants):\n    audit_type[]           — child replaces parent; a compliance chapter in a\n                             performance report is compliance-only, not both\n    report_sector[]        — child replaces parent\n    topics[]               — child replaces parent\n             — child replaces parent\n    audit_period           — child replaces parent (different period possible\n                             in omnibus reports)\n    main_audited_entities  — child replaces parent\n    other_audited_entities — child replaces parent\n\n  RESTRICTED (level constraints — pipeline must reject if violated):\n    audit_findings_categories — SECTION/SUBSECTION level ONLY.\n                                Never at report or chapter level.\n                                Use topics[] at report/chapter level instead.\n    pac_status               — CHAPTER level ONLY. Each chapter tracks\n                                PAC status independently.\n    main_audited_entities    — REPORT and CHAPTER level only. Not section\n                                or below unless metadata_override_mode=replace.\n\n  STANDALONE (not meaningful below report level — pipeline should ignore):\n    audit_period at block level — meaningless, ignore if encountered.\n\nOVERRIDE MODE EXCEPTION:\n  A content_unit with metadata_override_mode=replace (see structure.schema)\n  receives no inherited metadata from its parent. Its metadata is standalone.\n  Use for chapters in omnibus reports covering unrelated audit contexts.\n  OVERRIDE (not inherited from parent, overridable per unit): examination_coverage — set at report level for uniform coverage; override at chapter level in collection reports where chapters cover different states.",
+  "title": "Inheritable Audit Metadata",
+  "description": "Fields that cascade from report level down through chapters and sections. v3.3: $comment documents full array inheritance semantics for every field; aligned with structure.schema v3.1 metadata_override_mode.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "audit_type": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "description": "ID from taxonomy_audit_types.json. e.g. performance, compliance, financial"
+      },
+      "description": "INHERITANCE: OVERRIDE. Child value replaces parent entirely for that unit."
+    },
+    "primary_schemes": {
+      "type": "array",
+      "uniqueItems": true,
+      "description": "INHERITANCE: ADDITIVE. Primary Government schemes/programmes examined.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "other_schemes": {
+      "type": "array",
+      "uniqueItems": true,
+      "description": "INHERITANCE: ADDITIVE. Other schemes referenced incidentally.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "audit_period": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "INHERITANCE: OVERRIDE. Child period replaces parent. Relevant in omnibus reports where chapters cover different audit periods.",
+      "required": [
+        "start_year",
+        "end_year"
+      ],
+      "properties": {
+        "start_year": {
+          "type": "integer",
+          "minimum": 1860
+        },
+        "end_year": {
+          "type": "integer",
+          "minimum": 1860
+        }
+      }
+    },
+    "report_sector": {
+      "type": "array",
+      "uniqueItems": true,
+      "description": "INHERITANCE: OVERRIDE. Child value replaces parent.",
+      "items": {
+        "type": "string",
+        "description": "ID from taxonomy_sectors.json > report_sector."
+      }
+    },
+    "audit_findings_categories": {
+      "type": "array",
+      "uniqueItems": true,
+      "description": "INHERITANCE: ADDITIVE — BOTTOM-UP. Defined by editors at SECTION level only. Pipeline aggregates upward: section values collect into chapter, chapter values collect into report. Do NOT set manually at chapter or report level — those values are pipeline-computed. IDs from taxonomy_audit_findings_audit_report.json.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "regions": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "INHERITANCE: ADDITIVE per sub-field. states_uts always fill. ulbs and pris fill only when directly relevant.",
+      "properties": {
+        "states_uts": {
+          "type": "array",
+          "uniqueItems": true,
+          "description": "ADDITIVE. Two-letter state/UT codes. e.g. ['MP', 'GJ'].",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Z]{2}$"
+          }
+        },
+        "ulbs": {
+          "type": "array",
+          "uniqueItems": true,
+          "description": "ADDITIVE. Urban Local Body IDs from location_registry.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "pris": {
+          "type": "array",
+          "uniqueItems": true,
+          "description": "ADDITIVE. Panchayati Raj Institution IDs from location_registry.",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "topics": {
+      "type": "array",
+      "uniqueItems": true,
+      "description": "INHERITANCE: ADDITIVE. Set by editors at REPORT level (report-wide themes) and CHAPTER level (chapter-specific themes). Not set at section level. Pipeline aggregates chapter topics upward to report — report-level topics are the union of explicitly set report topics and all chapter topics. IDs from taxonomy_topics.json.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "impact": {
+      "type": "array",
+      "description": "INHERITANCE: ADDITIVE. Aggregate impacts for this unit and all descendants. Child impacts are never replaced — they accumulate upward for roll-up queries.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "impact_type",
+          "description"
+        ],
+        "properties": {
+          "impact_type": {
+            "type": "string",
+            "enum": [
+              "financial",
+              "social",
+              "environmental",
+              "regulatory",
+              "health",
+              "infrastructure",
+              "governance",
+              "reputational",
+              "other"
+            ]
+          },
+          "description": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "amount": {
+            "type": "number"
+          },
+          "unit": {
+            "type": "string"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "approximate": {
+            "type": "boolean"
+          },
+          "entity_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "period": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "pac_status": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "INHERITANCE: RESTRICTED — CHAPTER LEVEL ONLY. Each chapter tracks PAC status independently. Inherits downward within its own chapter.",
+      "properties": {
+        "selected_for_discussion": {
+          "type": "boolean"
+        },
+        "discussed": {
+          "type": "boolean"
+        },
+        "discussion_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "discussion_reference": {
+          "type": "string",
+          "description": "PAC committee report number or sitting reference."
+        },
+        "atn_status": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "submitted",
+            "reviewed",
+            "settled"
+          ]
+        }
+      }
+    },
+    "references": {
+      "type": "array",
+      "items": {
+        "$ref": "./reference.schema"
+      }
+    },
+    "main_audited_entities": {
+      "type": "array",
+      "description": "INHERITANCE: ADDITIVE — BOTTOM-UP for section level. Set at REPORT, CHAPTER, and SECTION level. Not below section. Section-level entities aggregate upward to chapter and report (pipeline-deduped). Principal audited entities. Each entry covers one ministry+department+bodies chain.",
+      "default": [],
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "ministry": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "entity_id of the Ministry. Null for State/UT reports."
+          },
+          "department": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "entity_id of the Department. Primary accountability unit. Should not be null except when a body reports directly to government."
+          },
+          "autonomous_bodies": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string"
+            },
+            "default": []
+          },
+          "other_bodies": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string"
+            },
+            "default": []
+          }
+        }
+      }
+    },
+    "other_audited_entities": {
+      "type": "array",
+      "description": "INHERITANCE: OVERRIDE. Entities examined incidentally. Same structure as main_audited_entities.",
+      "default": [],
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "ministry": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "department": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "autonomous_bodies": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string"
+            },
+            "default": []
+          },
+          "other_bodies": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string"
+            },
+            "default": []
+          }
+        }
+      }
+    },
+    "unit_structure": {
+      "type": "string",
+      "enum": [
+        "standalone",
+        "collective"
+      ],
+      "description": "INHERITANCE: NOT INHERITED — set explicitly per unit when needed. standalone = this chapter/section is a self-contained audit engagement, independently searchable and surfaceable in search results. collective = this chapter/section is part of a larger unified audit and is only meaningful in context of its parent. If not set, pipeline infers from report_structure: collection report → chapters default to standalone; standalone report → chapters default to collective. Override explicitly only when a chapter differs from the report-level default."
+    },
+    "examination_coverage": {
+      "type": "object",
+      "description": "INHERITANCE: OVERRIDE. Defines the geographic scope of actual audit field work. Distinct from jurisdiction — jurisdiction is constitutional accountability (always single); examination_coverage is where auditors actually went and what they examined. Set at report level for uniform coverage across all chapters. Override at unit level for chapters that cover different states (common in collection reports). Pipeline uses unit-level value when present; falls back to report-level.",
+      "required": [
+        "coverage_type"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "coverage_type": {
+          "type": "string",
+          "enum": [
+            "national",
+            "selected_states",
+            "single_state",
+            "headquarter_only",
+            "multi_state_comparative"
+          ],
+          "description": "national = all states/UTs in scope or nationwide. selected_states = specific states selected for field examination (test check or risk-based). single_state = one state examined — typical state audit. headquarter_only = no field units examined; audit confined to HQ records. multi_state_comparative = simultaneous examination across states for comparative analysis; findings are exhaustive across those states, not merely illustrative."
+        },
+        "state_ut_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "description": "IDs from registry_states_uts.json of states/UTs where field work was conducted. Required for coverage_type: selected_states and multi_state_comparative. Optional for national (omit or list all). Omit for headquarter_only and single_state (single_state coverage is already captured by report-level state_ut.id).",
+          "items": {
+            "type": "string",
+            "pattern": "^IN-[A-Z]{2,3}$"
+          }
+        },
+        "selection_basis": {
+          "type": "string",
+          "enum": [
+            "test_check",
+            "risk_based",
+            "all_units",
+            "purposive",
+            "random"
+          ],
+          "description": "test_check = sample-based; findings are illustrative not exhaustive. risk_based = states/units selected on assessed risk criteria. all_units = every field unit examined; findings are exhaustive. purposive = selected for a specific stated reason (see coverage_note). random = randomly sampled."
+        },
+        "sample_size": {
+          "type": "object",
+          "description": "Optional quantification of the test check sample.",
+          "additionalProperties": false,
+          "properties": {
+            "states_examined": {
+              "type": "integer",
+              "description": "Number of states/UTs where field work was conducted."
+            },
+            "districts_examined": {
+              "type": "integer",
+              "description": "Number of districts examined across all states."
+            },
+            "units_examined": {
+              "type": "integer",
+              "description": "Number of field units (offices, cities, blocks etc.) examined."
+            },
+            "total_universe": {
+              "type": "integer",
+              "description": "Total universe from which sample was drawn, if stated in report."
+            }
+          }
+        },
+        "coverage_note": {
+          "type": "object",
+          "description": "Multilingual explanatory note on coverage scope and selection rationale.",
+          "required": [
+            "en"
+          ],
+          "properties": {
+            "en": {
+              "type": "string"
+            },
+            "hi": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "allOf": [
+        {
+          "description": "selected_states and multi_state_comparative require state_ut_ids.",
+          "if": {
+            "properties": {
+              "coverage_type": {
+                "enum": [
+                  "selected_states",
+                  "multi_state_comparative"
+                ]
+              }
+            },
+            "required": [
+              "coverage_type"
+            ]
+          },
+          "then": {
+            "required": [
+              "state_ut_ids"
+            ],
+            "properties": {
+              "state_ut_ids": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    "dpc_act_sections": {
+      "type": "array",
+      "uniqueItems": true,
+      "description": "INHERITANCE: OVERRIDE. Sections of the CAG's (Duties, Powers and Conditions of Service) Act, 1971 under which this audit was conducted. Multi-value — an audit may derive authority from more than one section simultaneously (e.g. Section 13 for expenditure audit and Section 16 for receipts audit in the same report). Set at report level for the sections covering the whole report. Override at chapter or section level when individual units are conducted under different DPC Act authority than the report as a whole — chapter set replaces report set entirely (OVERRIDE, not additive). RESTRICTED: not meaningful below section level.",
+      "items": {
+        "type": "string",
+        "enum": [
+          "S13",
+          "S14",
+          "S15",
+          "S16",
+          "S17",
+          "S18",
+          "S19",
+          "S19A",
+          "S20",
+          "S21",
+          "S22",
+          "S23"
+        ],
+        "description": "S13=Audit of receipts and expenditure of Union and States. S14=Audit of bodies substantially financed by government grants or loans. S15=Audit of all grants or loans given by Union/State to bodies. S16=Audit of receipts of Union or State. S17=Audit of stores and stock. S18=Powers of CAG in connection with audit — right of access to records. S19=Audit of Government companies (under Companies Act). S19A=Audit of corporations established by or under law made by Parliament. S20=Audit of accounts of certain authorities or bodies at CAG's discretion or on request. S21=Audit of accounts of authorities entrusted with receipts/expenditure on behalf of Union. S22=Audit on application by a State Government — discretionary audit. S23=Power to dispense with detailed audit of accounts of a specified class."
+      }
+    }
+  }
+}

@@ -1,0 +1,201 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$version": "3.3",
+  "title": "Repository Catalog Schema",
+  "description": "Repository-wide catalog index. v3.3: main_audited_entities and other_audited_entities items now use additionalProperties:false (consistent with inheritable_audit_metadata.schema); government_context summary block retained.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["catalog_version", "generated_at", "entries"],
+  "properties": {
+    "catalog_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+$",
+      "description": "Schema version of this catalog file."
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "total_reports": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "entries": {
+      "type": "array",
+      "description": "One entry per report. Aggregated from each report's metadata.json by the ingestion pipeline.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "product_id", "product_type", "title", "year",
+          "default_language", "languages", "jurisdiction", "audit_status"
+        ],
+        "properties": {
+          "product_id":       { "type": "string" },
+          "product_type": {
+            "type": "string",
+            "enum": [
+              "audit_report", "accounts_report", "state_finance_report", "study_report", "audit_impact_report", "other"
+            ]
+          },
+          "title": {
+            "type": "object",
+            "additionalProperties": { "type": "string" }
+          },
+          "summary": {
+            "type": "object",
+            "additionalProperties": { "type": "string" }
+          },
+          "year":             { "type": "integer" },
+          "default_language": { "type": "string" },
+          "languages": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "jurisdiction": {
+            "type": "string",
+            "enum": ["UNION", "STATE", "UT", "LG"]
+          },
+          "audit_status": {
+            "type": "string",
+            "enum": [
+              "draft", "submitted_to_government", "tabled",
+              "published", "archived"
+            ]
+          },
+          "audit_type": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "report_sector": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "key_findings": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "topics": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "audit_period": {
+            "type": "object",
+            "properties": {
+              "start_year": { "type": "integer" },
+              "end_year":   { "type": "integer" }
+            }
+          },
+          "tabled_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "has_distributions": { "type": "boolean" },
+          "canonical_url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "supersedes":    { "type": "string" },
+          "superseded_by": { "type": "string" },
+          "report_path": {
+            "type": "string",
+            "description": "Relative path to the report folder from repository root."
+          },
+          "last_indexed": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "regions": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "states_uts": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "ulbs": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "pris": {
+                "type": "array",
+                "items": { "type": "string" }
+              }
+            }
+          },
+          "primary_schemes": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "other_schemes": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "pac_status": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "selected_for_discussion": { "type": ["boolean", "null"] },
+              "discussed":               { "type": ["boolean", "null"] },
+              "pac_report_reference":    { "type": ["string", "null"] }
+            }
+          },
+          "has_atn":  { "type": "boolean" },
+          "has_pdfs": { "type": "boolean" },
+          "main_audited_entities": {
+            "type": "array",
+            "description": "Principal audited entities. additionalProperties:false — consistent with inheritable_audit_metadata.schema.",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "ministry":    { "type": ["string", "null"] },
+                "department":  { "type": ["string", "null"] },
+                "autonomous_bodies": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                },
+                "other_bodies": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                }
+              }
+            }
+          },
+          "other_audited_entities": {
+            "type": "array",
+            "description": "Other audited entities. additionalProperties:false — consistent with inheritable_audit_metadata.schema.",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "ministry":    { "type": ["string", "null"] },
+                "department":  { "type": ["string", "null"] },
+                "autonomous_bodies": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                },
+                "other_bodies": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                }
+              }
+            }
+          },
+          "government_context": {
+            "type": "object",
+            "additionalProperties": false,
+            "description": "Audit accountability summary for portal display.",
+            "properties": {
+              "nodal_ministry": { "type": ["string", "null"] },
+              "nodal_departments": {
+                "type": "array",
+                "items": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

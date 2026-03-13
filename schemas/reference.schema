@@ -1,0 +1,112 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$version": "3.0",
+  "title": "Reference Object",
+  "description": "Typed, machine-readable cross-reference to any addressable element in the repository or to an external source. Used in blocks, dataset cells, unit metadata, and footnotes. v3.0: added reference_id for deduplication, target_format for machine resolution, inverse_relationship_type for bidirectional graph traversal.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["type", "target", "target_format"],
+  "properties": {
+    "reference_id": {
+      "type": "string",
+      "pattern": "^REF-[A-Z0-9][A-Z0-9\\-]+[A-Z0-9]$",
+      "description": "Stable ID assigned at ingest time. e.g. REF-AR01-CAG-2025-UT-JK-0042. Enables citation frequency tracking and cross-report deduplication. Set by ingestion pipeline."
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "report",
+        "chapter",
+        "section",
+        "subsection",
+        "block",
+        "dataset",
+        "figure",
+        "image",
+        "asset",
+        "footnote",
+        "finding",
+        "recommendation",
+        "entity",
+        "location",
+        "taxonomy",
+        "legislation",
+        "external",
+        "atn"
+      ],
+      "description": "Semantic type of the referenced element. Determines how target_format is interpreted by resolvers."
+    },
+    "target_format": {
+      "type": "string",
+      "enum": [
+        "product_id",
+        "product_id/unit_id",
+        "product_id/block_id",
+        "product_id/dataset_id",
+        "product_id/atn_id",
+        "entity_id",
+        "location_id",
+        "legislation_code",
+        "taxonomy_id",
+        "uri"
+      ],
+      "description": "Format contract for the target field. Tells resolvers exactly how to parse and look up the target without heuristics or pattern matching. Must be consistent with type: block->product_id/block_id, legislation->legislation_code, external->uri, entity->entity_id, etc."
+    },
+    "target": {
+      "type": "string",
+      "description": "Stable ID or URI. Format governed by target_format. Internal examples: 'AR01-CAG-2025-UT-JK' (product_id), 'AR01-CAG-2025-UT-JK/CH02-SEC03' (product_id/unit_id), 'ACT-IFA-1871-SEC-13' (legislation_code). External: full URI."
+    },
+    "relationship_type": {
+      "type": "string",
+      "enum": [
+        "cites",
+        "confirms",
+        "contradicts",
+        "extends",
+        "follows_up",
+        "supersedes",
+        "amends",
+        "implements",
+        "evidences",
+        "related_same_entity",
+        "related_same_scheme",
+        "related_same_sector",
+        "related_prior_year"
+      ],
+      "description": "Semantic relationship from source to target. Directional — source performs this action toward target. 'related_*' variants replace the old catch-all 'related' with specific subtypes to enable precise graph queries."
+    },
+    "inverse_relationship_type": {
+      "type": "string",
+      "enum": [
+        "cited_by",
+        "confirmed_by",
+        "contradicted_by",
+        "extended_by",
+        "followed_up_by",
+        "superseded_by",
+        "amended_by",
+        "implemented_by",
+        "evidenced_by",
+        "related_same_entity",
+        "related_same_scheme",
+        "related_same_sector",
+        "related_prior_year"
+      ],
+      "description": "Declared inverse of relationship_type. Enables bidirectional graph traversal without runtime inference. Symmetric relationships (related_*) carry the same value in both directions. Set automatically by ingestion pipeline from relationship_type."
+    },
+    "label": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "Multilingual display label for this reference. e.g. { 'en': 'See Chapter 3, Para 3.2.1' }"
+    },
+    "note": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "Optional multilingual explanatory note. Use for temporal validity context (e.g. 'Act amended in 2019 mid-audit-period'), confidence context, or editorial commentary on the relationship."
+    }
+  }
+}

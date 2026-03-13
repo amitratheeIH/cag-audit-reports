@@ -1,0 +1,104 @@
+{
+  "$version": "1.0",
+  "$schema_sync": {
+    "target_schema": "common_metadata.schema",
+    "target_field": "product_type.enum",
+    "instruction": "The enum in common_metadata.schema must be kept in sync with the ids in this file. Run scripts/sync_product_type_enum.py after any change to this file."
+  },
+  "description": {
+    "en": "Controlled vocabulary for CAG repository product types. Drives product_type field in common_metadata.schema. atn_applicable and pac_applicable flags are consumed by the ingestion pipeline to determine whether ATN and PAC tracking structures are expected for a given product.",
+    "hi": "CAG भंडार उत्पाद प्रकारों के लिए नियंत्रित शब्दावली।"
+  },
+  "entries": [
+    {
+      "id": "audit_report",
+      "label": {
+        "en": "Audit Report",
+        "hi": "लेखापरीक्षा प्रतिवेदन"
+      },
+      "description": {
+        "en": "Report containing audit findings, observations, and recommendations arising from performance, compliance, or financial audits conducted by CAG or Accountants General. These reports are tabled in Parliament or State Legislature and generate ATN and PAC accountability cycles.",
+        "hi": "CAG या महालेखाकार द्वारा संचालित निष्पादन, अनुपालन या वित्तीय लेखापरीक्षाओं से उत्पन्न लेखापरीक्षा निष्कर्षों, टिप्पणियों और सिफारिशों वाला प्रतिवेदन।"
+      },
+      "atn_applicable": true,
+      "pac_applicable": true,
+      "active": true,
+      "sort_order": 1
+    },
+    {
+      "id": "accounts_report",
+      "label": {
+        "en": "Accounts Report",
+        "hi": "लेखा प्रतिवेदन"
+      },
+      "description": {
+        "en": "Finance Accounts and Appropriation Accounts of the Union or State Government. Certification products prepared by CAG under constitutional mandate. Do not contain audit findings and do not generate ATN or PAC cycles.",
+        "hi": "केंद्र या राज्य सरकार के वित्त लेखे और विनियोग लेखे। संवैधानिक अधिदेश के तहत CAG द्वारा तैयार प्रमाणन उत्पाद।"
+      },
+      "atn_applicable": false,
+      "pac_applicable": false,
+      "active": true,
+      "sort_order": 2
+    },
+    {
+      "id": "state_finance_report",
+      "label": {
+        "en": "State Finance Report",
+        "hi": "राज्य वित्त प्रतिवेदन"
+      },
+      "description": {
+        "en": "Report analysing the fiscal health, financial management, and budgetary trends of a State Government. Prepared by the Accountant General and tabled in the State Legislature. Does not contain audit findings in the ATN sense and does not generate ATN or PAC accountability cycles.",
+        "hi": "राज्य सरकार की वित्तीय स्थिति, वित्तीय प्रबंधन और बजटीय प्रवृत्तियों का विश्लेषण करने वाला प्रतिवेदन।"
+      },
+      "atn_applicable": false,
+      "pac_applicable": false,
+      "active": true,
+      "sort_order": 3
+    },
+    {
+      "id": "study_report",
+      "label": {
+        "en": "Study Report",
+        "hi": "अध्ययन प्रतिवेदन"
+      },
+      "description": {
+        "en": "Thematic or sectoral study, research paper, discussion paper, or guidance document published by CAG or its offices. Covers topics of public financial management, audit methodology, governance, or policy. Does not contain audit findings in the formal sense and does not generate ATN or PAC cycles.",
+        "hi": "CAG या उसके कार्यालयों द्वारा प्रकाशित विषयगत या क्षेत्रीय अध्ययन, शोध पत्र, चर्चा पत्र या मार्गदर्शन दस्तावेज़।"
+      },
+      "atn_applicable": false,
+      "pac_applicable": false,
+      "active": true,
+      "sort_order": 4
+    },
+    {
+      "id": "audit_impact_report",
+      "label": {
+        "en": "Audit Impact Report",
+        "hi": "लेखापरीक्षा प्रभाव प्रतिवेदन"
+      },
+      "description": {
+        "en": "Report assessing the real-world outcomes and ground-level changes resulting from past audit recommendations and government responses. Published after a sufficient interval following the original audit to evaluate whether recommended actions produced the intended impact. Editorial and analytical in nature — does not generate ATN or PAC accountability cycles.",
+        "hi": "पिछली लेखापरीक्षा सिफारिशों और सरकारी प्रतिक्रियाओं से उत्पन्न वास्तविक परिणामों और जमीनी स्तर के परिवर्तनों का आकलन करने वाला प्रतिवेदन।"
+      },
+      "atn_applicable": false,
+      "pac_applicable": false,
+      "active": true,
+      "sort_order": 5
+    },
+    {
+      "id": "other",
+      "label": {
+        "en": "Other",
+        "hi": "अन्य"
+      },
+      "description": {
+        "en": "Any CAG publication that does not fit the above product types. Used as a catch-all for miscellaneous documents, special purpose reports, commemorative publications, and administrative documents. Does not generate ATN or PAC cycles.",
+        "hi": "कोई भी CAG प्रकाशन जो उपरोक्त उत्पाद प्रकारों में फिट नहीं होता।"
+      },
+      "atn_applicable": false,
+      "pac_applicable": false,
+      "active": true,
+      "sort_order": 6
+    }
+  ]
+}
