@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$version": "3.5",
+  "$version": "3.6",
   "title": "Content Block Schema",
-  "description": "Content block schema. v3.2: para_type cleaned up — removed deviation (belongs inside audit_finding), added executive_summary, conclusion, recommendation_summary, best_practice. callout_type cleaned up — removed audit_observation, government_reply, recommendation (these have dedicated block types). annotations[] added at block level for non-destructive span annotation of paragraph text — supports ai, human, and rule_based sources with confidence scoring and review workflow. v3.5: executive_summary_block added — first-class block type for chapter/section-level executive summaries with title, paragraphs[], and bullets[] as structured fields. Complements the flat string content_unit.executive_summary metadata field in structure.schema and the para_type=executive_summary paragraph blocks; each serves a distinct purpose: unit metadata (machine summary for TOC/vector), in-flow paragraph (single prose chunk), executive_summary_block (full structured in-flow summary with mixed content).",
+  "description": "Content block schema. v3.2: para_type cleaned up — removed deviation (belongs inside audit_finding), added executive_summary, conclusion, recommendation_summary, best_practice. callout_type cleaned up — removed audit_observation, government_reply, recommendation (these have dedicated block types). annotations[] added at block level for non-destructive span annotation of paragraph text — supports ai, human, and rule_based sources with confidence scoring and review workflow. v3.5: executive_summary_block added — first-class block type for chapter/section-level executive summaries with title, paragraphs[], and bullets[] as structured fields. Complements the flat string content_unit.executive_summary metadata field in structure.schema and the para_type=executive_summary paragraph blocks; each serves a distinct purpose: unit metadata (machine summary for TOC/vector), in-flow paragraph (single prose chunk), executive_summary_block (full structured in-flow summary with mixed content). v3.6: collapsed boolean added to heading content — enables viewer-level section collapse/expand toggle.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -422,6 +422,11 @@
               },
               "numbered": {
                 "type": "boolean"
+              },
+              "collapsed": {
+                "type": "boolean",
+                "default": false,
+                "description": "If true, the section content beneath this heading renders collapsed by default with an expand toggle. Viewer collapses all blocks until the next heading of equal or higher level. Default false."
               }
             }
           }
