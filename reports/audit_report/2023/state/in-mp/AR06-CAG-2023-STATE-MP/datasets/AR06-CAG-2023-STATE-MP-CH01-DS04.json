@@ -1,0 +1,78 @@
+{
+  "dataset_id": "AR06-CAG-2023-STATE-MP-CH01-DS04",
+  "title": {
+    "en": "Table 1.4: Major and sub-major hypotheses and corresponding audit chapters"
+  },
+  "dataset_type": "hierarchical",
+  "source_block": "AR06-CAG-2023-STATE-MP-CH01-B063",
+  "columns": [
+    {
+      "id": "major",
+      "label": {
+        "en": "Major Hypothesis"
+      },
+      "col_type": "text"
+    },
+    {
+      "id": "submajor",
+      "label": {
+        "en": "Sub-major Hypothesis"
+      },
+      "col_type": "text"
+    },
+    {
+      "id": "chapter",
+      "label": {
+        "en": "Chapter"
+      },
+      "col_type": "text"
+    }
+  ],
+  "data": [
+    {
+      "row_id": "r01",
+      "group_id": "h1",
+      "cells": {
+        "major": "Kshipra River has remained polluted even after multiple interventions of the State Agencies.",
+        "submajor": "1. Untreated sewage of ULBs is merging in Kshipra River. (It includes six minor hypotheses.)",
+        "chapter": "Chapter 2"
+      }
+    },
+    {
+      "row_id": "r02",
+      "group_id": "h1",
+      "cells": {
+        "major": "",
+        "submajor": "2. Inadequate treatment of Industrial waste. (It includes five minor hypotheses.)",
+        "chapter": "Chapter 3"
+      }
+    },
+    {
+      "row_id": "r03",
+      "group_id": "h1",
+      "cells": {
+        "major": "",
+        "submajor": "3. Water Quality of Kshipra River and its tributaries had been adversely affected due to pollution at bank. (It includes three minor hypotheses.)",
+        "chapter": "Chapter 4"
+      }
+    },
+    {
+      "row_id": "r04",
+      "group_id": "h2",
+      "cells": {
+        "major": "The natural flow of water in Kshipra River has reduced due to improper management and over extraction of groundwater in Kshipra sub-basin.",
+        "submajor": "4. Water flow in Kshipra River has reduced drastically. (It includes four minor hypotheses.)",
+        "chapter": "Chapter 5"
+      }
+    },
+    {
+      "row_id": "r05",
+      "group_id": "h2",
+      "cells": {
+        "major": "",
+        "submajor": "5. Due to decreasing groundwater, flow of River is getting affected. (It includes four minor hypotheses.)",
+        "chapter": "Chapter 6"
+      }
+    }
+  ]
+}

@@ -1,0 +1,73 @@
+{
+  "dataset_id": "AR06-CAG-2023-STATE-MP-CH01-DS02",
+  "title": {
+    "en": "Table 1.2: Priority I River stretches identified in Kshipra and Kahn Rivers"
+  },
+  "dataset_type": "flat",
+  "source_block": "AR06-CAG-2023-STATE-MP-CH01-B048",
+  "source": {
+    "en": "Report (September 2018), Central Pollution Control Board"
+  },
+  "columns": [
+    {
+      "id": "sn",
+      "label": {
+        "en": "S.N."
+      },
+      "col_type": "index"
+    },
+    {
+      "id": "river",
+      "label": {
+        "en": "Name of River"
+      },
+      "col_type": "text"
+    },
+    {
+      "id": "stretch",
+      "label": {
+        "en": "Polluted Stretch"
+      },
+      "col_type": "text"
+    },
+    {
+      "id": "bod",
+      "label": {
+        "en": "BOD Range"
+      },
+      "col_type": "text"
+    },
+    {
+      "id": "priority",
+      "label": {
+        "en": "Priority of Stretch"
+      },
+      "col_type": "text"
+    }
+  ],
+  "data": [
+    {
+      "row_id": "r01",
+      "cells": {
+        "sn": "1",
+        "river": "Kshipra",
+        "stretch": "Siddhawat to Triveni Sangam",
+        "bod": "4 to 38 mg/l",
+        "priority": "Priority I"
+      }
+    },
+    {
+      "row_id": "r02",
+      "cells": {
+        "sn": "2",
+        "river": "Kahn",
+        "stretch": "Kabitkhedi to Khajrana",
+        "bod": "30.8 to 80 mg/l",
+        "priority": "Priority I"
+      }
+    }
+  ],
+  "notes": {
+    "en": "Priority I: BOD 30 mg/l and above. Priority categorisation per CPCB Polluted River Stretches Report, September 2018."
+  }
+}

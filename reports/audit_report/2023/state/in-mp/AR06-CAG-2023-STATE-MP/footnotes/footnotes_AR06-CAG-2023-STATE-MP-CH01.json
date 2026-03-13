@@ -1,0 +1,97 @@
+{
+  "unit_id": "AR06-CAG-2023-STATE-MP-CH01",
+  "footnotes": [
+    {
+      "footnote_id": "AR06-CAG-2023-STATE-MP-CH01-FN01",
+      "marker": "1",
+      "anchor_block_id": "AR06-CAG-2023-STATE-MP-CH01-B010",
+      "footnote_type": "statistical_source",
+      "text": {
+        "en": "As per Central Water Commission Kshipra Sub-Basin Report (2011)."
+      }
+    },
+    {
+      "footnote_id": "AR06-CAG-2023-STATE-MP-CH01-FN02",
+      "marker": "2",
+      "anchor_block_id": "AR06-CAG-2023-STATE-MP-CH01-B016",
+      "footnote_type": "statistical_source",
+      "text": {
+        "en": "Data obtained from ULB, Indore (Vision Kahn)."
+      }
+    },
+    {
+      "footnote_id": "AR06-CAG-2023-STATE-MP-CH01-FN03",
+      "marker": "3",
+      "anchor_block_id": "AR06-CAG-2023-STATE-MP-CH01-B020",
+      "footnote_type": "explanatory",
+      "text": {
+        "en": "Watershed is the area drained by a river and its tributaries."
+      }
+    },
+    {
+      "footnote_id": "AR06-CAG-2023-STATE-MP-CH01-FN04",
+      "marker": "4",
+      "anchor_block_id": "AR06-CAG-2023-STATE-MP-CH01-B027",
+      "footnote_type": "explanatory",
+      "text": {
+        "en": "Babalia Khurd Stop Dam, Mundiwarang Stop Dam, Goga Khedi Stop Dam, Semalia Chau Stop Dam, Jalod Stop Dam, Dugariya Stop Dam, Bhudwasa Stop Dam, Kshipra Stop Dam, Kshipra Barrage, Puadra Happa Stop Dam, Simrola Barrage, Chimli Stop Dam, Alampur Udana Stop Dam, Kithoda Stop Dam, Triveni Stop Dam, Gaughat Stop Dam, Dewas Stop Dam and Ujjain Stop Dam."
+      }
+    },
+    {
+      "footnote_id": "AR06-CAG-2023-STATE-MP-CH01-FN05",
+      "marker": "5",
+      "anchor_block_id": "AR06-CAG-2023-STATE-MP-CH01-B033",
+      "footnote_type": "explanatory",
+      "text": {
+        "en": "Urban Local Bodies, Madhya Pradesh Pollution Control Board and Public Health Engineering Department."
+      }
+    },
+    {
+      "footnote_id": "AR06-CAG-2023-STATE-MP-CH01-FN06",
+      "marker": "6",
+      "anchor_block_id": "AR06-CAG-2023-STATE-MP-CH01-B033",
+      "footnote_type": "explanatory",
+      "text": {
+        "en": "Forest Department, Madhya Pradesh Industrial Development Corporation, Water Resources Department, Narmada Valley Development Authority, Central Ground Water Board, Central Pollution Control Board, Panchayat Raj Institutions, Farmer Welfare and Agriculture Development, Land Revenue, Energy Department and others."
+      }
+    },
+    {
+      "footnote_id": "AR06-CAG-2023-STATE-MP-CH01-FN07",
+      "marker": "7",
+      "anchor_block_id": "AR06-CAG-2023-STATE-MP-CH01-B035",
+      "footnote_type": "explanatory",
+      "text": {
+        "en": "Urban Development and Housing Department, Public Health Engineering Department and Water Resources Department."
+      }
+    },
+    {
+      "footnote_id": "AR06-CAG-2023-STATE-MP-CH01-FN08",
+      "marker": "8",
+      "anchor_block_id": "AR06-CAG-2023-STATE-MP-CH01-B046",
+      "footnote_type": "data_note",
+      "text": {
+        "en": "At Mahidpur, as per Water Quality Index of March 2018, published by the MPPCB."
+      }
+    },
+    {
+      "footnote_id": "AR06-CAG-2023-STATE-MP-CH01-FN09",
+      "marker": "9",
+      "anchor_block_id": "AR06-CAG-2023-STATE-MP-CH01-B047",
+      "footnote_type": "explanatory",
+      "text": {
+        "en": "CPCB had categorized Polluted River Stretches into Priority I to V on the basis of Biological Oxygen Demand. Priority I is highest polluted river stretch having BOD 30 mg/l and above; Priority II is having BOD between 20 and 30 mg/l; Priority III is having BOD between 10 and 20 mg/l; Priority IV is having BOD between 3 and 10 mg/l; and Priority V is having BOD less than 3 mg/l."
+      },
+      "references": [
+        {
+          "type": "entity",
+          "target": "IN-CPCB",
+          "target_format": "entity_id",
+          "relationship_type": "cites",
+          "label": {
+            "en": "CPCB Polluted River Stretches Report, September 2018"
+          }
+        }
+      ]
+    }
+  ]
+}

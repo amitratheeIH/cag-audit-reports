@@ -1,0 +1,197 @@
+{
+  "dataset_id": "AR06-CAG-2023-STATE-MP-CH01-DS01",
+  "title": {
+    "en": "Table 1.1: District/block wise area covered in Kshipra Watershed"
+  },
+  "unit": "sq. km",
+  "dataset_type": "hierarchical",
+  "source_block": "AR06-CAG-2023-STATE-MP-CH01-B022",
+  "source": {
+    "en": "Report on Rejuvenation of Kshipra River by Central Ground Water Board"
+  },
+  "columns": [
+    {
+      "id": "district",
+      "label": {
+        "en": "District"
+      },
+      "col_type": "text"
+    },
+    {
+      "id": "total_area",
+      "label": {
+        "en": "Total Area"
+      },
+      "col_type": "numeric",
+      "unit": "sq. km"
+    },
+    {
+      "id": "kshipra_area",
+      "label": {
+        "en": "Area under Kshipra Sub-basin"
+      },
+      "col_type": "numeric",
+      "unit": "sq. km"
+    },
+    {
+      "id": "block",
+      "label": {
+        "en": "Block"
+      },
+      "col_type": "text"
+    },
+    {
+      "id": "block_area",
+      "label": {
+        "en": "Block Area"
+      },
+      "col_type": "numeric",
+      "unit": "sq. km"
+    }
+  ],
+  "data": [
+    {
+      "row_id": "r01",
+      "group_id": "indore",
+      "cells": {
+        "district": "Indore",
+        "total_area": 3898,
+        "kshipra_area": 2373,
+        "block": "Mhow",
+        "block_area": 195
+      }
+    },
+    {
+      "row_id": "r02",
+      "group_id": "indore",
+      "cells": {
+        "district": "",
+        "total_area": "",
+        "kshipra_area": "",
+        "block": "Indore",
+        "block_area": 881
+      }
+    },
+    {
+      "row_id": "r03",
+      "group_id": "indore",
+      "cells": {
+        "district": "",
+        "total_area": "",
+        "kshipra_area": "",
+        "block": "Depalpur",
+        "block_area": 547
+      }
+    },
+    {
+      "row_id": "r04",
+      "group_id": "indore",
+      "cells": {
+        "district": "",
+        "total_area": "",
+        "kshipra_area": "",
+        "block": "Sanwer",
+        "block_area": 750
+      }
+    },
+    {
+      "row_id": "r05",
+      "group_id": "dhar",
+      "cells": {
+        "district": "Dhar",
+        "total_area": 8153,
+        "kshipra_area": 16,
+        "block": "Nalchha",
+        "block_area": 16
+      }
+    },
+    {
+      "row_id": "r06",
+      "group_id": "dewas",
+      "cells": {
+        "district": "Dewas",
+        "total_area": 7920,
+        "kshipra_area": 484,
+        "block": "Dewas",
+        "block_area": 484
+      }
+    },
+    {
+      "row_id": "r07",
+      "group_id": "ujjain",
+      "cells": {
+        "district": "Ujjain",
+        "total_area": 6091,
+        "kshipra_area": 2374,
+        "block": "Barnagar",
+        "block_area": 125
+      }
+    },
+    {
+      "row_id": "r08",
+      "group_id": "ujjain",
+      "cells": {
+        "district": "",
+        "total_area": "",
+        "kshipra_area": "",
+        "block": "Ujjain",
+        "block_area": 1152
+      }
+    },
+    {
+      "row_id": "r09",
+      "group_id": "ujjain",
+      "cells": {
+        "district": "",
+        "total_area": "",
+        "kshipra_area": "",
+        "block": "Ghatiya",
+        "block_area": 58
+      }
+    },
+    {
+      "row_id": "r10",
+      "group_id": "ujjain",
+      "cells": {
+        "district": "",
+        "total_area": "",
+        "kshipra_area": "",
+        "block": "Khachrod",
+        "block_area": 276
+      }
+    },
+    {
+      "row_id": "r11",
+      "group_id": "ujjain",
+      "cells": {
+        "district": "",
+        "total_area": "",
+        "kshipra_area": "",
+        "block": "Mahidpur",
+        "block_area": 763
+      }
+    },
+    {
+      "row_id": "r12",
+      "group_id": "ratlam",
+      "cells": {
+        "district": "Ratlam",
+        "total_area": 4861,
+        "kshipra_area": 530,
+        "block": "Alot",
+        "block_area": 530
+      }
+    },
+    {
+      "row_id": "r13",
+      "row_type": "total",
+      "cells": {
+        "district": "Total",
+        "total_area": 30923,
+        "kshipra_area": 5777,
+        "block": "",
+        "block_area": 5777
+      }
+    }
+  ]
+}

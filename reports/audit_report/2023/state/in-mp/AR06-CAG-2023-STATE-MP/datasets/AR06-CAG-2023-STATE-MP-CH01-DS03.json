@@ -1,0 +1,177 @@
+{
+  "dataset_id": "AR06-CAG-2023-STATE-MP-CH01-DS03",
+  "title": {
+    "en": "Table 1.3: Water quality status of Kshipra River and its tributaries at various monitoring stations"
+  },
+  "dataset_type": "cross_tab",
+  "source_block": "AR06-CAG-2023-STATE-MP-CH01-B051",
+  "source": {
+    "en": "Data from Madhya Pradesh Pollution Control Board"
+  },
+  "columns": [
+    {
+      "id": "sn",
+      "label": {
+        "en": "S.N."
+      },
+      "col_type": "index"
+    },
+    {
+      "id": "river",
+      "label": {
+        "en": "River"
+      },
+      "col_type": "text"
+    },
+    {
+      "id": "station",
+      "label": {
+        "en": "Monitoring Station"
+      },
+      "col_type": "text"
+    },
+    {
+      "id": "mar2018",
+      "label": {
+        "en": "March 2018"
+      },
+      "col_type": "text"
+    },
+    {
+      "id": "mar2020",
+      "label": {
+        "en": "March 2020"
+      },
+      "col_type": "text"
+    },
+    {
+      "id": "mar2021",
+      "label": {
+        "en": "March 2021"
+      },
+      "col_type": "text"
+    }
+  ],
+  "data": [
+    {
+      "row_id": "r01",
+      "group_id": "kahn",
+      "cells": {
+        "sn": "1",
+        "river": "Kahn River",
+        "station": "River Kahn at Kabit Khedi",
+        "mar2018": "Not satisfactory",
+        "mar2020": "Not satisfactory",
+        "mar2021": "Not satisfactory"
+      }
+    },
+    {
+      "row_id": "r02",
+      "group_id": "kahn",
+      "cells": {
+        "sn": "2",
+        "river": "Kahn River",
+        "station": "River Kahn at Shakkar Khedi",
+        "mar2018": "Not satisfactory",
+        "mar2020": "Not satisfactory",
+        "mar2021": "Not satisfactory"
+      }
+    },
+    {
+      "row_id": "r03",
+      "group_id": "kahn",
+      "cells": {
+        "sn": "3",
+        "river": "Kahn River",
+        "station": "River Kahn at Sanwer",
+        "mar2018": "Not satisfactory",
+        "mar2020": "Not satisfactory",
+        "mar2021": "Not satisfactory"
+      }
+    },
+    {
+      "row_id": "r04",
+      "group_id": "kshipra",
+      "cells": {
+        "sn": "4",
+        "river": "Kshipra River",
+        "station": "River Kshipra at Ramghat, Ujjain",
+        "mar2018": "Not satisfactory",
+        "mar2020": "Not satisfactory",
+        "mar2021": "Not satisfactory"
+      }
+    },
+    {
+      "row_id": "r05",
+      "group_id": "kshipra",
+      "cells": {
+        "sn": "5",
+        "river": "Kshipra River",
+        "station": "River Kshipra at 1 km downstream Triveni, Ujjain",
+        "mar2018": "Not satisfactory",
+        "mar2020": "Not satisfactory",
+        "mar2021": "Not satisfactory"
+      }
+    },
+    {
+      "row_id": "r06",
+      "group_id": "kshipra",
+      "cells": {
+        "sn": "6",
+        "river": "Kshipra River",
+        "station": "River Kshipra at Siddhwat, Ujjain",
+        "mar2018": "Not satisfactory",
+        "mar2020": "Not satisfactory",
+        "mar2021": "Not satisfactory"
+      }
+    },
+    {
+      "row_id": "r07",
+      "group_id": "kshipra",
+      "cells": {
+        "sn": "7",
+        "river": "Kshipra River",
+        "station": "River Kshipra at Gaughat",
+        "mar2018": "Not satisfactory",
+        "mar2020": "Not satisfactory",
+        "mar2021": "Not satisfactory"
+      }
+    },
+    {
+      "row_id": "r08",
+      "group_id": "kshipra",
+      "cells": {
+        "sn": "8",
+        "river": "Kshipra River",
+        "station": "River Kshipra at Mahidpur",
+        "mar2018": "Dry",
+        "mar2020": "Not satisfactory",
+        "mar2021": "Satisfactory"
+      }
+    },
+    {
+      "row_id": "r09",
+      "group_id": "kshipra",
+      "cells": {
+        "sn": "9",
+        "river": "Kshipra River",
+        "station": "River Kshipra at Kshipra-Suklya, Dewas",
+        "mar2018": "Satisfactory",
+        "mar2020": "Satisfactory",
+        "mar2021": "Satisfactory"
+      }
+    },
+    {
+      "row_id": "r10",
+      "group_id": "gambhir",
+      "cells": {
+        "sn": "10",
+        "river": "Gambhir River",
+        "station": "Gambhir at Ujjain",
+        "mar2018": "Satisfactory",
+        "mar2020": "Satisfactory",
+        "mar2021": "Satisfactory"
+      }
+    }
+  ]
+}

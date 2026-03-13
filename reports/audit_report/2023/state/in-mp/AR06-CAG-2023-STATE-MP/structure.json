@@ -3,18 +3,41 @@
     {
       "unit_id": "AR06-CAG-2023-STATE-MP-PREFACE",
       "unit_type": "preface",
-      "title": {"en": "Preface", "hi": "प्रस्तावना"},
+      "title": {
+        "en": "Preface"
+      },
       "seq": 10,
       "toc_include": true
     },
     {
       "unit_id": "AR06-CAG-2023-STATE-MP-ES",
       "unit_type": "executive_summary",
-      "title": {"en": "Executive Summary", "hi": "कार्यकारी सारांश"},
+      "title": {
+        "en": "Executive Summary"
+      },
       "seq": 20,
       "toc_include": true
     }
   ],
-  "content_units": [],
+  "content_units": [
+    {
+      "unit_id": "AR06-CAG-2023-STATE-MP-CH01",
+      "unit_type": "chapter",
+      "title": {
+        "en": "Introduction"
+      },
+      "para_number": "1",
+      "seq": 10,
+      "toc_include": true,
+      "children": [
+        "AR06-CAG-2023-STATE-MP-CH01-SEC01",
+        "AR06-CAG-2023-STATE-MP-CH01-SEC02",
+        "AR06-CAG-2023-STATE-MP-CH01-SEC03",
+        "AR06-CAG-2023-STATE-MP-CH01-SEC04",
+        "AR06-CAG-2023-STATE-MP-CH01-SEC05",
+        "AR06-CAG-2023-STATE-MP-CH01-SEC06"
+      ]
+    }
+  ],
   "back_matter": []
 }

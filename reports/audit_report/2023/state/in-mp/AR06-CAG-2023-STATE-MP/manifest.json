@@ -13,25 +13,73 @@
   },
   "units": [
     "units/AR06-CAG-2023-STATE-MP-PREFACE.json",
-    "units/AR06-CAG-2023-STATE-MP-ES.json"
+    "units/AR06-CAG-2023-STATE-MP-ES.json",
+    "units/AR06-CAG-2023-STATE-MP-CH01.json",
+    "units/AR06-CAG-2023-STATE-MP-CH01-SEC01.json",
+    "units/AR06-CAG-2023-STATE-MP-CH01-SEC01-SUB01.json",
+    "units/AR06-CAG-2023-STATE-MP-CH01-SEC01-SUB02.json",
+    "units/AR06-CAG-2023-STATE-MP-CH01-SEC01-SUB03.json",
+    "units/AR06-CAG-2023-STATE-MP-CH01-SEC01-SUB04.json",
+    "units/AR06-CAG-2023-STATE-MP-CH01-SEC01-SUB05.json",
+    "units/AR06-CAG-2023-STATE-MP-CH01-SEC01-SUB06.json",
+    "units/AR06-CAG-2023-STATE-MP-CH01-SEC02.json",
+    "units/AR06-CAG-2023-STATE-MP-CH01-SEC03.json",
+    "units/AR06-CAG-2023-STATE-MP-CH01-SEC04.json",
+    "units/AR06-CAG-2023-STATE-MP-CH01-SEC05.json",
+    "units/AR06-CAG-2023-STATE-MP-CH01-SEC05-SUB01.json",
+    "units/AR06-CAG-2023-STATE-MP-CH01-SEC05-SUB02.json",
+    "units/AR06-CAG-2023-STATE-MP-CH01-SEC06.json"
   ],
   "blocks": [
     "blocks/content_block_PREFACE.ndjson",
-    "blocks/content_block_ES.ndjson"
+    "blocks/content_block_ES.ndjson",
+    "blocks/content_block_CH01.ndjson"
+  ],
+  "datasets": [
+    "datasets/AR06-CAG-2023-STATE-MP-CH01-DS01.json",
+    "datasets/AR06-CAG-2023-STATE-MP-CH01-DS02.json",
+    "datasets/AR06-CAG-2023-STATE-MP-CH01-DS03.json",
+    "datasets/AR06-CAG-2023-STATE-MP-CH01-DS04.json"
+  ],
+  "footnotes": [
+    "footnotes/footnotes_AR06-CAG-2023-STATE-MP-CH01.json"
   ],
   "file_lists": {
     "metadata": "metadata.json",
     "structure": "structure.json",
     "units": [
       "units/AR06-CAG-2023-STATE-MP-PREFACE.json",
-      "units/AR06-CAG-2023-STATE-MP-ES.json"
+      "units/AR06-CAG-2023-STATE-MP-ES.json",
+      "units/AR06-CAG-2023-STATE-MP-CH01.json",
+      "units/AR06-CAG-2023-STATE-MP-CH01-SEC01.json",
+      "units/AR06-CAG-2023-STATE-MP-CH01-SEC01-SUB01.json",
+      "units/AR06-CAG-2023-STATE-MP-CH01-SEC01-SUB02.json",
+      "units/AR06-CAG-2023-STATE-MP-CH01-SEC01-SUB03.json",
+      "units/AR06-CAG-2023-STATE-MP-CH01-SEC01-SUB04.json",
+      "units/AR06-CAG-2023-STATE-MP-CH01-SEC01-SUB05.json",
+      "units/AR06-CAG-2023-STATE-MP-CH01-SEC01-SUB06.json",
+      "units/AR06-CAG-2023-STATE-MP-CH01-SEC02.json",
+      "units/AR06-CAG-2023-STATE-MP-CH01-SEC03.json",
+      "units/AR06-CAG-2023-STATE-MP-CH01-SEC04.json",
+      "units/AR06-CAG-2023-STATE-MP-CH01-SEC05.json",
+      "units/AR06-CAG-2023-STATE-MP-CH01-SEC05-SUB01.json",
+      "units/AR06-CAG-2023-STATE-MP-CH01-SEC05-SUB02.json",
+      "units/AR06-CAG-2023-STATE-MP-CH01-SEC06.json"
     ],
     "blocks": [
       "blocks/content_block_PREFACE.ndjson",
-      "blocks/content_block_ES.ndjson"
+      "blocks/content_block_ES.ndjson",
+      "blocks/content_block_CH01.ndjson"
     ],
-    "datasets": [],
-    "footnotes": [],
+    "datasets": [
+      "datasets/AR06-CAG-2023-STATE-MP-CH01-DS01.json",
+      "datasets/AR06-CAG-2023-STATE-MP-CH01-DS02.json",
+      "datasets/AR06-CAG-2023-STATE-MP-CH01-DS03.json",
+      "datasets/AR06-CAG-2023-STATE-MP-CH01-DS04.json"
+    ],
+    "footnotes": [
+      "footnotes/footnotes_AR06-CAG-2023-STATE-MP-CH01.json"
+    ],
     "atn": [],
     "pdfs": []
   },
