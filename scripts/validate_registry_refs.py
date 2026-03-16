@@ -154,16 +154,20 @@ def validate_metadata_file(report_dir: Path, registries: dict,
 
     # product_type lives in manifest.json, not metadata.json — skip here (checked via manifest)
 
-    # state_ut
-    rl_data = metadata.get("report_level", {})
+    # metadata.json = product.metadata = { "common": {...}, "specific": {...} }
+    common   = metadata.get("common", {})
+    specific = metadata.get("specific", {})
+
+    # state_ut lives in specific.report_level
+    rl_data  = specific.get("report_level", {})
     state_ut = rl_data.get("state_ut", {})
     if isinstance(state_ut, dict):
         check_ref(state_ut.get("id"), registries["states_uts"], "state_ut.id", "metadata.json", errors)
 
-    # report-level inheritable (audit_findings_categories not set here — section-level only)
-    inheritable = metadata.get("inheritable", {})
+    # report-level inheritable — in specific.inheritable
+    inheritable = specific.get("inheritable", {})
     if inheritable:
-        errors.extend(validate_inheritable(inheritable, registries, "metadata.json/inheritable",
+        errors.extend(validate_inheritable(inheritable, registries, "metadata.json/specific/inheritable",
                                            audit_findings_ids=None))
 
     return errors

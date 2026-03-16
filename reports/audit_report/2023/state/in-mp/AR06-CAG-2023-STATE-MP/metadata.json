@@ -1,78 +1,83 @@
 {
-  "inheritable": {
-    "audit_type": ["ATYPE-PERFORMANCE", "ATYPE-ENVIRONMENTAL"],
-    "report_sector": ["SECT-CIVIL"],
-    "audit_period": {
-      "start_year": 2016,
-      "end_year": 2021
+  "common": {
+    "product_id": "AR06-CAG-2023-STATE-MP",
+    "product_type": "audit_report",
+    "title": {
+      "en": "Report of the Comptroller and Auditor General of India on Water Resources Management in Madhya Pradesh",
+      "hi": "मध्य प्रदेश में जल संसाधन प्रबंधन पर भारत के नियंत्रक-महालेखापरीक्षक का प्रतिवेदन"
     },
-    "main_audited_entities": [
-      {
-        "ministry": null,
-        "department": "IN-MP-DEPT-WATER-RESOURCES",
-        "autonomous_bodies": [],
-        "other_bodies": []
-      }
-    ],
-    "primary_schemes": [],
-    "topics": [
-      "environment_forests",
-      "water_resources",
-      "river_management",
-      "pollution_control",
-      "water_quality_monitoring"
-    ]
+    "year": 2023,
+    "default_language": "en",
+    "languages": ["en"]
   },
-  "report_level": {
-    "report_number": {
-      "number": 6,
-      "year": 2023
-    },
-    "jurisdiction": "STATE",
-    "state_ut": {
-      "id": "IN-MP",
-      "name": {
-        "en": "Madhya Pradesh",
-        "hi": "मध्य प्रदेश"
-      }
-    },
-    "audit_report_status": "tabled",
-    "date_of_submission_to_government": "2023-06-21",
-    "tabling": {
-      "applicable": true,
-      "legislature": "State Legislature",
-      "lower_house": {
-        "name": {
-          "en": "Madhya Pradesh Vidhan Sabha",
-          "hi": "मध्य प्रदेश विधान सभा"
-        },
-        "date_of_placing": "2024-02-08"
-      }
-    },
-    "signed_by": {
-      "name": { "en": "Priya Parikh" },
-      "designation": {
-        "en": "Accountant General (Audit II), Madhya Pradesh",
-        "hi": "महालेखाकार (लेखापरीक्षा II), मध्य प्रदेश"
+  "specific": {
+    "inheritable": {
+      "audit_type": ["ATYPE-PERFORMANCE", "ATYPE-ENVIRONMENTAL"],
+      "report_sector": ["SECT-CIVIL"],
+      "audit_period": {
+        "start_year": 2016,
+        "end_year": 2021
       },
-      "date": "2023-06-16",
-      "place": { "en": "Bhopal", "hi": "भोपाल" }
-    },
-    "countersigned_by": {
-      "name": { "en": "Girish Chandra Murmu" },
-      "designation": {
-        "en": "Comptroller and Auditor General of India",
-        "hi": "भारत के नियंत्रक-महालेखापरीक्षक"
+      "regions": {
+        "states_uts": ["IN-MP"]
       },
-      "date": "2023-06-19",
-      "place": { "en": "New Delhi", "hi": "नई दिल्ली" }
-    },
-    "report_structure": "standalone",
-    "pdf_assets": {
-      "complete": {
-        "en": {
-          "local_path": "pdfs/en/complete/AR06-CAG-2023-STATE-MP-en.pdf"
+      "examination_coverage": {
+        "coverage_type": "single_state"
+      },
+      "main_audited_entities": [
+        {
+          "ministry": null,
+          "department": "IN-MP-DEPT-WATER-RESOURCES",
+          "autonomous_bodies": [],
+          "other_bodies": []
         }
+      ],
+      "primary_schemes": [],
+      "topics": [
+        "environment_forests",
+        "water_resources",
+        "river_management",
+        "pollution_control",
+        "water_quality_monitoring"
+      ]
+    },
+    "report_level": {
+      "report_number": {
+        "number": 6,
+        "year": 2023
+      },
+      "jurisdiction": "STATE",
+      "state_ut": {
+        "id": "IN-MP",
+        "name": {
+          "en": "Madhya Pradesh",
+          "hi": "मध्य प्रदेश"
+        }
+      },
+      "audit_report_status": "tabled",
+      "date_of_submission_to_government": "2023-06-21",
+      "tabling": {
+        "applicable": true,
+        "legislature": "State Legislature",
+        "lower_house": {
+          "name": {
+            "en": "Madhya Pradesh Vidhan Sabha",
+            "hi": "मध्य प्रदेश विधान सभा"
+          },
+          "date_of_placing": "2024-02-08"
+        }
+      },
+      "report_structure": "standalone",
+      "pdf_assets": {
+        "complete": {
+          "en": {
+            "local_path": "pdfs/en/complete/AR06-CAG-2023-STATE-MP-en.pdf"
+          }
+        }
+      },
+      "government_context": {
+        "nodal_ministry": null,
+        "nodal_departments": ["IN-MP-DEPT-WATER-RESOURCES"]
       }
     }
   }

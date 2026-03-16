@@ -198,9 +198,11 @@ def build_catalog_doc(
                   primary_schemes, other_schemes, regions,
                   main_audited_entities, other_audited_entities
     """
-    rl_data  = metadata.get("report_level", {})
-    inh      = metadata.get("inheritable", {})
-    tabling  = rl_data.get("tabling", {})
+    common     = metadata.get("common", {})
+    specific   = metadata.get("specific", {})
+    rl_data    = specific.get("report_level", {})
+    inh        = specific.get("inheritable", {})
+    tabling    = rl_data.get("tabling", {})
     file_lists = manifest.get("file_lists", {})
 
     # ── tabled_date: from lower_house when tabling is applicable ─────────────
@@ -216,7 +218,7 @@ def build_catalog_doc(
     has_pdfs = bool(file_lists.get("pdfs")) or bool(rl_data.get("pdf_assets"))
 
     # ── has_distributions: common_metadata distributions array ───────────────
-    distributions = metadata.get("distributions", [])
+    distributions = common.get("distributions", [])
     has_distributions = bool(distributions)
 
     # ── report_path: relative path from repo root ────────────────────────────
@@ -229,10 +231,10 @@ def build_catalog_doc(
     doc: dict = {
         "product_id":       product_id,
         "product_type":     manifest.get("product_type"),
-        "title":            metadata.get("title"),
+        "title":            common.get("title"),
         "year":             manifest.get("year"),
-        "default_language": metadata.get("default_language"),
-        "languages":        metadata.get("languages", []),
+        "default_language": common.get("default_language"),
+        "languages":        common.get("languages", []),
         "jurisdiction":     rl_data.get("jurisdiction"),
         "audit_status":     rl_data.get("audit_report_status"),
         "has_atn":          has_atn,
@@ -243,11 +245,11 @@ def build_catalog_doc(
 
     # ── optional fields — only include when values are present ───────────────
     _opt = {
-        "summary":               metadata.get("summary"),
+        "summary":               common.get("summary"),
         "tabled_date":           tabled_date,
-        "canonical_url":         metadata.get("canonical_url"),
-        "supersedes":            metadata.get("supersedes"),
-        "superseded_by":         metadata.get("superseded_by"),
+        "canonical_url":         common.get("canonical_url"),
+        "supersedes":            common.get("supersedes"),
+        "superseded_by":         common.get("superseded_by"),
         "has_distributions":     has_distributions or None,
         "audit_type":            inh.get("audit_type") or None,
         "report_sector":         inh.get("report_sector") or None,

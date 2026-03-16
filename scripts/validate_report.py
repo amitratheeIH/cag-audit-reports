@@ -118,29 +118,56 @@ def validate_report_dir(report_dir: Path, resolver: RefResolver) -> dict[str, li
         manifest, load_schema("manifest.schema"), resolver, manifest_path
     ))
 
-    # ── root JSON files ───────────────────────────────────────────────────────
-    # metadata.json schema depends on product_type — dispatch dynamically.
+    # ── metadata.json — validate common and specific separately ─────────────
+    # metadata.json = product.metadata = { "common": {...}, "specific": {...} }
+    # common  → always validated against common_metadata.schema
+    # specific → validated against the product-type-specific schema
     # Add new product types here as their specific schemas are created.
-    METADATA_SCHEMA_MAP = {
+    SPECIFIC_SCHEMA_MAP = {
         "audit_report": "audit_report_metadata.schema",
     }
     product_type = manifest.get("product_type", "")
-    metadata_schema_file = METADATA_SCHEMA_MAP.get(product_type)
+    specific_schema_file = SPECIFIC_SCHEMA_MAP.get(product_type)
 
-    for fname, schema_file in [
-        ("metadata.json", metadata_schema_file),
-        ("structure.json", "structure.schema"),
-    ]:
-        fpath = report_dir / fname
-        if not fpath.exists():
-            missing(fname)
-            continue
-        if schema_file is None:
-            # No product-specific schema defined yet for this product_type — skip silently.
-            # structure.json always has a schema so this only applies to metadata.json.
-            continue
-        record(fpath, validate_json(
-            json.loads(fpath.read_text()), load_schema(schema_file), resolver, fpath
+    metadata_path = report_dir / "metadata.json"
+    if not metadata_path.exists():
+        missing("metadata.json")
+    else:
+        metadata_doc = json.loads(metadata_path.read_text())
+
+        # Validate common section
+        common_section = metadata_doc.get("common")
+        if common_section is None:
+            all_errors.setdefault("metadata.json", []).append(
+                "  [metadata.json] missing required key 'common'"
+            )
+        else:
+            errs = validate_json(
+                common_section, load_schema("common_metadata.schema"), resolver, metadata_path
+            )
+            record(metadata_path, errs)
+
+        # Validate specific section
+        specific_section = metadata_doc.get("specific")
+        if specific_section is None:
+            all_errors.setdefault("metadata.json", []).append(
+                "  [metadata.json] missing required key 'specific'"
+            )
+        elif specific_schema_file is None:
+            pass  # No product-specific schema defined yet — skip silently
+        else:
+            errs = validate_json(
+                specific_section, load_schema(specific_schema_file), resolver, metadata_path
+            )
+            record(metadata_path, errs)
+
+    # ── structure.json ────────────────────────────────────────────────────────
+    structure_path = report_dir / "structure.json"
+    if not structure_path.exists():
+        missing("structure.json")
+    else:
+        record(structure_path, validate_json(
+            json.loads(structure_path.read_text()), load_schema("structure.schema"), resolver, structure_path
         ))
 
     # ── units/ ── *.json ──────────────────────────────────────────────────────
