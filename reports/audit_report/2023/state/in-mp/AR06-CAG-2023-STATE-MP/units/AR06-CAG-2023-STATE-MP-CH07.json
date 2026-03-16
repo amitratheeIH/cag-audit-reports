@@ -1,0 +1,24 @@
+{
+  "unit_id": "AR06-CAG-2023-STATE-MP-CH07",
+  "unit_type": "chapter",
+  "title": {
+    "en": "Conclusions and Recommendations",
+    "hi": "निष्कर्ष एवं अनुशंसाएं"
+  },
+  "para_number": "7",
+  "seq": 70,
+  "toc_include": true,
+  "taggable": false,
+  "collapsible": true,
+  "default_collapsed": false,
+  "metadata_override_mode": "merge",
+  "slug": "chapter-7-conclusions-and-recommendations",
+  "executive_summary": {
+    "en": "This chapter presents audit conclusions mapped to the five sub-major hypotheses tested during the performance audit of Kshipra River degradation, and summarises ten recommendations addressed to ULBs, MPPCB, NVDA, CGWB and the State Government.",
+    "hi": "यह अध्याय कषिप्रा नदी की क्षरण की निष्पादन लेखापरीक्षा के दौरान परीक्षण की गई पांच उप-प्रमुख परिकल्पनाओं पर मैप किए गए लेखापरीक्षा निष्कर्षों को प्रस्तुत करता है और नगरीय निकायों, MPPCB, NVDA, CGWB तथा राज्य सरकार को संबोधित दस अनुशंसाओं का सारांश प्रस्तुत करता है।"
+  },
+  "translation_status": {
+    "en": "original",
+    "hi": "pending"
+  }
+}
