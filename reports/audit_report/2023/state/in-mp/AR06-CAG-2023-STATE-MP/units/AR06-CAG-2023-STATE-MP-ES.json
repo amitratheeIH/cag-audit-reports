@@ -6,5 +6,13 @@
     "hi": "कार्यकारी सारांश"
   },
   "seq": 20,
-  "toc_include": true
+  "toc_include": true,
+  "collapsible": false,
+  "default_collapsed": false,
+  "taggable": false,
+  "slug": "executive-summary",
+  "translation_status": {
+    "en": "original",
+    "hi": "pending"
+  }
 }
