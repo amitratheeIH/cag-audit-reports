@@ -8,7 +8,17 @@
     },
     "year": 2023,
     "default_language": "en",
-    "languages": ["en"]
+    "languages": ["en"],
+    "slug": "cag-mp-water-resources-2023",
+    "version": "1.0",
+    "summary": {
+      "en": "This performance and environmental audit examines water resources management in Madhya Pradesh for 2016-17 to 2020-21, covering planning, execution, and outcomes of irrigation infrastructure, river conservation, water quality monitoring, and related schemes under the Water Resources Department.",
+      "hi": "यह निष्पादन एवं पर्यावरण लेखापरीक्षा 2016-17 से 2020-21 की अवधि में मध्य प्रदेश में जल संसाधन प्रबंधन की जांच करती है, जिसमें जल संसाधन विभाग के अधीन सिंचाई अवसंरचना, नदी संरक्षण, जल गुणवत्ता निगरानी और संबंधित योजनाओं की योजना, निष्पादन और परिणामों को शामिल किया गया है।"
+    },
+    "publisher": {
+      "en": "Office of the Accountant General (Audit II), Madhya Pradesh",
+      "hi": "महालेखाकार (लेखापरीक्षा II), मध्य प्रदेश का कार्यालय"
+    }
   },
   "specific": {
     "inheritable": {
@@ -24,6 +34,7 @@
       "examination_coverage": {
         "coverage_type": "single_state"
       },
+      "dpc_act_sections": ["S13"],
       "main_audited_entities": [
         {
           "ministry": null,
@@ -65,6 +76,36 @@
             "hi": "मध्य प्रदेश विधान सभा"
           },
           "date_of_placing": "2024-02-08"
+        }
+      },
+      "signed_by": {
+        "name": {
+          "en": "Priya Parikh",
+          "hi": "प्रिया पारीख"
+        },
+        "designation": {
+          "en": "Accountant General (Audit II), Madhya Pradesh",
+          "hi": "महालेखाकार (लेखापरीक्षा II), मध्य प्रदेश"
+        },
+        "date": "2023-06-16",
+        "place": {
+          "en": "Bhopal",
+          "hi": "भोपाल"
+        }
+      },
+      "countersigned_by": {
+        "name": {
+          "en": "Girish Chandra Murmu",
+          "hi": "गिरीश चंद्र मुर्मू"
+        },
+        "designation": {
+          "en": "Comptroller and Auditor General of India",
+          "hi": "भारत के नियंत्रक-महालेखापरीक्षक"
+        },
+        "date": "2023-06-19",
+        "place": {
+          "en": "New Delhi",
+          "hi": "नई दिल्ली"
         }
       },
       "report_structure": "standalone",

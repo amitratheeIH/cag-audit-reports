@@ -195,6 +195,7 @@
     },
     "references": {
       "type": "array",
+      "description": "INHERITANCE: NOT INHERITED. Cross-references attached to this specific unit. Each unit's references are standalone and scoped to that unit only — they are never cascaded to child units. Use for linking a unit to the legislation, prior reports, datasets, or external sources it directly cites.",
       "items": {
         "$ref": "./reference.schema"
       }
