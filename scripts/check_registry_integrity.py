@@ -94,7 +94,7 @@ def check_states_uts():
     entries = get_entries(data)
     ids = check_no_duplicates(entries, "id", path.name)
 
-    check_refs(entries, ["predecessor_id", "successor_id"], ids, path.name)
+    check_refs(entries, ["predecessor_ids", "successor_ids"], ids, path.name)
 
     for e in entries:
         if e.get("active") is False:
@@ -136,7 +136,7 @@ def check_schemes():
     entries = get_entries(data)
     ids = check_no_duplicates(entries, "id", path.name)
 
-    check_refs(entries, ["predecessor_id", "successor_id"], ids, path.name)
+    check_refs(entries, ["predecessor_ids", "successor_ids"], ids, path.name)
 
     info(path.name, len(entries))
 
@@ -295,6 +295,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-# NOTE: check_topics() and updated main() appended below — replace the old ones above manually

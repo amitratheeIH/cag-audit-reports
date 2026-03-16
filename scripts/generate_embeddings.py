@@ -67,14 +67,20 @@ def build_embedding_text(block: dict) -> str:
     Concatenate meaningful text fields from a content block for embedding.
 
     Dispatch order:
-      executive_summary_block — title + paragraphs[] + bullets[]
+      executive_summary_block — title + body[] (paragraph items + bullets items)
       paragraph               — content.text
       heading                 — content.text
       list                    — content.items[]
       table                   — headers + first 10 rows
       callout / sidebar       — content.title + content.text
       image / figure / map    — content.caption + content.alt_text
+      audit_finding           — title, observation, effect, cause, recommendation
+      recommendation          — content.text
       (fallback)              — content.text if present
+
+    Note: executive_summary_block uses v3.7 body[] structure — an ordered array
+    of typed items ({type: "paragraph"} or {type: "bullets"}) that preserves the
+    exact interleaved reading order from the source document.
     """
     parts = []
     block_type = block.get("block_type", "")
@@ -92,20 +98,23 @@ def build_embedding_text(block: dict) -> str:
         # title
         if title := content.get("title"):
             parts.append(_multilingual_str(title))
-        # prose paragraphs
-        for para in content.get("paragraphs", []):
-            t = _multilingual_str(para)
-            if t:
-                parts.append(t)
-        # structured bullets — include text and any sub_items
-        for bullet in content.get("bullets", []):
-            t = _multilingual_str(bullet.get("text", {}))
-            if t:
-                parts.append(t)
-            for sub in bullet.get("sub_items", []):
-                s = _multilingual_str(sub)
-                if s:
-                    parts.append(s)
+        # v3.7: body[] is an ordered array of typed items — paragraph | bullets
+        # (replaces the old v3.6 paragraphs[] + bullets[] split)
+        for item in content.get("body", []):
+            item_type = item.get("type")
+            if item_type == "paragraph":
+                t = _multilingual_str(item.get("text", {}))
+                if t:
+                    parts.append(t)
+            elif item_type == "bullets":
+                for bullet in item.get("items", []):
+                    t = _multilingual_str(bullet.get("text", {}))
+                    if t:
+                        parts.append(t)
+                    for sub in bullet.get("sub_items", []):
+                        s = _multilingual_str(sub)
+                        if s:
+                            parts.append(s)
 
     elif block_type in ("paragraph", "heading", "pullquote", "quote"):
         if text := content.get("text"):

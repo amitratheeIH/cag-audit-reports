@@ -57,16 +57,25 @@ SCHEMAS_DIR = REPO_ROOT / "schemas"
 TAXONOMIES_DIR = REPO_ROOT / "taxonomies"
 REPORTS_DIR = REPO_ROOT / "reports"
 
-# ── Valid product_type values (from taxonomy) ─────────────────────────────────
+# ── Valid product_type values — loaded dynamically from taxonomy ──────────────
+# Source of truth: taxonomies/taxonomy_product_types.json
+# Do NOT hardcode this list — add new product types to the taxonomy file only.
 
-PRODUCT_TYPES = [
-    "audit_report",
-    "accounts_report",
-    "state_finance_report",
-    "study_report",
-    "audit_impact_report",
-    "other",
-]
+def _load_product_types() -> list[str]:
+    """
+    Load product_type IDs from taxonomy_product_types.json at import time.
+    Falls back to an empty list if the file is missing (bootstrap / test runs).
+    """
+    path = TAXONOMIES_DIR / "taxonomy_product_types.json"
+    if not path.exists():
+        return []
+    try:
+        data = json.loads(path.read_text())
+        return [e["id"] for e in data.get("entries", []) if "id" in e]
+    except (json.JSONDecodeError, KeyError):
+        return []
+
+PRODUCT_TYPES: list[str] = _load_product_types()
 
 # ── Jurisdictions that get a state_ut_code subfolder ─────────────────────────
 

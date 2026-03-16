@@ -8,12 +8,14 @@ corresponding registry / taxonomy file.
 Checks:
   - state_ut.id                  → registry_states_uts.json
   - examination_coverage.state_ut_ids[] → registry_states_uts.json
+  - regions.states_uts[]         → registry_states_uts.json
   - main_audited_entities[]      → registry_entities.json
   - other_audited_entities[]     → registry_entities.json
   - primary_schemes[]            → registry_schemes.json
   - other_schemes[]              → registry_schemes.json
   - report_sector[]              → taxonomy_report_sector.json
   - audit_type[]                 → taxonomy_audit_type.json
+  - topics[]                     → taxonomy_topics.json
   - product_type                 → taxonomy_product_types.json
   - audit_findings_categories[]  → taxonomy_audit_findings_{product_type}.json
                                    (product-type-specific; file looked up from manifest.product_type)
@@ -73,6 +75,7 @@ def load_registries() -> dict[str, set[str]]:
         "report_sector": load_registry_ids("taxonomy_report_sector.json"),
         "audit_type":    load_registry_ids("taxonomy_audit_type.json"),
         "product_type":  load_registry_ids("taxonomy_product_types.json"),
+        "topics":        load_registry_ids("taxonomy_topics.json"),
     }
 
 
@@ -92,6 +95,7 @@ def validate_inheritable(obj: dict, registries: dict, source: str,
     r = registries
     check_refs(obj.get("report_sector", []), r["report_sector"], "report_sector", source, errors)
     check_refs(obj.get("audit_type", []), r["audit_type"], "audit_type", source, errors)
+    check_refs(obj.get("topics", []), r["topics"], "topics", source, errors)
     # main_audited_entities — array of {ministry, department, autonomous_bodies, other_bodies}
     for entry in obj.get("main_audited_entities", []):
         if isinstance(entry, dict):
@@ -112,6 +116,14 @@ def validate_inheritable(obj: dict, registries: dict, source: str,
             check_ref(entry, r["entities"], "other_audited_entities", source, errors)
     check_refs(obj.get("primary_schemes", []), r["schemes"], "primary_schemes", source, errors)
     check_refs(obj.get("other_schemes", []), r["schemes"], "other_schemes", source, errors)
+    # regions.states_uts — now uses full IN-XX format, validate against registry
+    check_refs(
+        obj.get("regions", {}).get("states_uts", []),
+        r["states_uts"],
+        "regions.states_uts",
+        source,
+        errors,
+    )
     coverage = obj.get("examination_coverage", {})
     if isinstance(coverage, dict):
         check_refs(

@@ -119,17 +119,29 @@ def validate_report_dir(report_dir: Path, resolver: RefResolver) -> dict[str, li
     ))
 
     # ── root JSON files ───────────────────────────────────────────────────────
+    # metadata.json schema depends on product_type — dispatch dynamically.
+    # Add new product types here as their specific schemas are created.
+    METADATA_SCHEMA_MAP = {
+        "audit_report": "audit_report_metadata.schema",
+    }
+    product_type = manifest.get("product_type", "")
+    metadata_schema_file = METADATA_SCHEMA_MAP.get(product_type)
+
     for fname, schema_file in [
-        ("metadata.json", "audit_report_metadata.schema"),
+        ("metadata.json", metadata_schema_file),
         ("structure.json", "structure.schema"),
     ]:
         fpath = report_dir / fname
-        if fpath.exists():
-            record(fpath, validate_json(
-                json.loads(fpath.read_text()), load_schema(schema_file), resolver, fpath
-            ))
-        else:
+        if not fpath.exists():
             missing(fname)
+            continue
+        if schema_file is None:
+            # No product-specific schema defined yet for this product_type — skip silently.
+            # structure.json always has a schema so this only applies to metadata.json.
+            continue
+        record(fpath, validate_json(
+            json.loads(fpath.read_text()), load_schema(schema_file), resolver, fpath
+        ))
 
     # ── units/ ── *.json ──────────────────────────────────────────────────────
     units_d = rl.units_dir(report_dir)
@@ -151,7 +163,7 @@ def validate_report_dir(report_dir: Path, resolver: RefResolver) -> dict[str, li
     if not blocks_d.exists():
         missing("blocks/")
     else:
-        ndjson_files = sorted(blocks_d.glob("content_block_*.ndjson"))
+        ndjson_files = rl.block_ndjson_files(report_dir)
         if not ndjson_files:
             missing("blocks/ (no content_block_*.ndjson files)")
         for nf in ndjson_files:
@@ -161,7 +173,7 @@ def validate_report_dir(report_dir: Path, resolver: RefResolver) -> dict[str, li
     atn_d = rl.atn_dir(report_dir)
     atn_schema = load_schema("atn.schema")
     if atn_d.exists():
-        for af in sorted(atn_d.glob("atn_*.json")):
+        for af in rl.atn_json_files(report_dir):
             record(af, validate_json(
                 json.loads(af.read_text()), atn_schema, resolver, af
             ))
@@ -170,7 +182,7 @@ def validate_report_dir(report_dir: Path, resolver: RefResolver) -> dict[str, li
     datasets_d = rl.datasets_dir(report_dir)
     ds_schema = load_schema("dataset.schema")
     if datasets_d.exists():
-        for df in sorted(p for p in datasets_d.glob("*.json") if p.is_file()):
+        for df in rl.dataset_json_files(report_dir):
             record(df, validate_json(
                 json.loads(df.read_text()), ds_schema, resolver, df
             ))
@@ -179,7 +191,7 @@ def validate_report_dir(report_dir: Path, resolver: RefResolver) -> dict[str, li
     footnotes_d = rl.footnotes_dir(report_dir)
     fn_schema = load_schema("footnote.schema")
     if footnotes_d.exists():
-        for ff in sorted(footnotes_d.glob("footnotes_*.json")):
+        for ff in rl.footnote_json_files(report_dir):
             record(ff, validate_json(
                 json.loads(ff.read_text()), fn_schema, resolver, ff
             ))

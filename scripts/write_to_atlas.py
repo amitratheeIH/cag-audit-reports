@@ -12,12 +12,14 @@ Reads from:
   datasets/   *.json
   footnotes/  footnotes_*.json
   embeddings/ embeddings_*.ndjson  (pipeline-generated sidecars)
+  catalog.json                     (repo-wide; at REPO_ROOT, not inside report folder)
 
 Collections written:
   report_meta     — one doc per report
   block_vectors   — one doc per content block (with embedding if available)
   atn_index       — one doc per ATN record
-  catalog_index   — one doc per catalog entity chain
+  catalog_index   — one doc per report, built from manifest.json + metadata.json
+                    (no separate catalog.json file required)
 
 Usage:
     python scripts/write_to_atlas.py --product-id AR06-CAG-2023-STATE-MP
@@ -174,13 +176,95 @@ def build_atn_docs(product_id: str, report_dir: Path) -> list[dict]:
     return docs
 
 
-def build_catalog_docs(product_id: str, report_dir: Path) -> list[dict]:
-    # catalog.json lives at report root (not in a subfolder)
-    catalog_path = report_dir / "catalog.json"
-    if not catalog_path.exists():
-        return []
-    data = json.loads(catalog_path.read_text())
-    return [{"product_id": product_id, **entry} for entry in data.get("entries", [])]
+def build_catalog_doc(
+    product_id: str,
+    report_dir: Path,
+    manifest: dict,
+    metadata: dict,
+) -> dict:
+    """
+    Build a catalog_index document entirely from manifest.json + metadata.json.
+    No separate catalog.json file required — the catalog entry is derived at
+    ingest time from the source files already loaded.
+
+    Field sources:
+      manifest  → product_id, product_type, year, has_atn, has_pdfs
+      metadata (top-level common fields) → title, summary, languages,
+                  default_language, canonical_url, supersedes, superseded_by,
+                  has_distributions, distributions
+      metadata.report_level → jurisdiction, audit_status, tabled_date,
+                  government_context, state_ut
+      metadata.inheritable  → audit_type, report_sector, topics, audit_period,
+                  primary_schemes, other_schemes, regions,
+                  main_audited_entities, other_audited_entities
+    """
+    rl_data  = metadata.get("report_level", {})
+    inh      = metadata.get("inheritable", {})
+    tabling  = rl_data.get("tabling", {})
+    file_lists = manifest.get("file_lists", {})
+
+    # ── tabled_date: from lower_house when tabling is applicable ─────────────
+    tabled_date = None
+    if tabling.get("applicable"):
+        lh = tabling.get("lower_house", {})
+        tabled_date = lh.get("date_of_placing")
+
+    # ── has_atn: non-empty atn list in file_lists ─────────────────────────────
+    has_atn = bool(file_lists.get("atn"))
+
+    # ── has_pdfs: non-empty pdfs list OR pdf_assets present in report_level ──
+    has_pdfs = bool(file_lists.get("pdfs")) or bool(rl_data.get("pdf_assets"))
+
+    # ── has_distributions: common_metadata distributions array ───────────────
+    distributions = metadata.get("distributions", [])
+    has_distributions = bool(distributions)
+
+    # ── report_path: relative path from repo root ────────────────────────────
+    try:
+        report_path = str(report_dir.relative_to(rl.REPO_ROOT))
+    except ValueError:
+        report_path = str(report_dir)
+
+    # ── base required fields ──────────────────────────────────────────────────
+    doc: dict = {
+        "product_id":       product_id,
+        "product_type":     manifest.get("product_type"),
+        "title":            metadata.get("title"),
+        "year":             manifest.get("year"),
+        "default_language": metadata.get("default_language"),
+        "languages":        metadata.get("languages", []),
+        "jurisdiction":     rl_data.get("jurisdiction"),
+        "audit_status":     rl_data.get("audit_report_status"),
+        "has_atn":          has_atn,
+        "has_pdfs":         has_pdfs,
+        "report_path":      report_path,
+        "last_indexed":     datetime.now(timezone.utc).isoformat(),
+    }
+
+    # ── optional fields — only include when values are present ───────────────
+    _opt = {
+        "summary":               metadata.get("summary"),
+        "tabled_date":           tabled_date,
+        "canonical_url":         metadata.get("canonical_url"),
+        "supersedes":            metadata.get("supersedes"),
+        "superseded_by":         metadata.get("superseded_by"),
+        "has_distributions":     has_distributions or None,
+        "audit_type":            inh.get("audit_type") or None,
+        "report_sector":         inh.get("report_sector") or None,
+        "topics":                inh.get("topics") or None,
+        "audit_period":          inh.get("audit_period"),
+        "primary_schemes":       inh.get("primary_schemes") or None,
+        "other_schemes":         inh.get("other_schemes") or None,
+        "regions":               inh.get("regions"),
+        "main_audited_entities": inh.get("main_audited_entities") or None,
+        "other_audited_entities":inh.get("other_audited_entities") or None,
+        "government_context":    rl_data.get("government_context"),
+    }
+    for k, v in _opt.items():
+        if v is not None:
+            doc[k] = v
+
+    return doc
 
 
 def upsert_collection(db, collection_name: str, docs: list[dict],
@@ -238,10 +322,10 @@ def ingest_report(report_dir: Path, db, force: bool, dry_run: bool) -> dict:
         db, COLLECTIONS["atn_index"], atn_docs, "atn_id", dry_run
     )
 
-    # catalog_index
-    catalog_docs = build_catalog_docs(product_id, report_dir)
+    # catalog_index — one doc per report, built from manifest + metadata
+    catalog_doc = build_catalog_doc(product_id, report_dir, manifest, metadata)
     stats["catalog"] = upsert_collection(
-        db, COLLECTIONS["catalog_index"], catalog_docs, "product_id", dry_run
+        db, COLLECTIONS["catalog_index"], [catalog_doc], "product_id", dry_run
     )
 
     return stats

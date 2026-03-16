@@ -1,9 +1,9 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$version": "3.6",
+  "$version": "3.7",
   "$comment": "INHERITANCE RULES — read before implementing pipeline cascade logic.\n\nSCOPE: This schema is applied at two levels only:\n  1. report level  — via audit_report_metadata.schema > inheritable field\n  2. unit level    — via structure.schema > content_unit > metadata field\n  Blocks do NOT carry this schema. Blocks use the scoped block_metadata field in content_block.schema for the three fields that have paragraph-level editorial value.\n\nARRAY INHERITANCE SEMANTICS — every array field is labelled:\n\n  ADDITIVE (child values merge with parent, deduplicating by value):\n    impact[]               — child impacts aggregate upward, never replaced\n    regions.states_uts     — child adds geographic specificity to parent\n    regions.ulbs           — additive, fill only when directly relevant\n    regions.pris           — additive, fill only when directly relevant\n    referenced_entities[]  — flat union, deduplication by entity_id\n    primary_schemes[]      — additive across levels\n    other_schemes[]        — additive across levels\n\n  OVERRIDE (child value completely replaces parent for that unit and descendants):\n    audit_type[]           — child replaces parent; a compliance chapter in a\n                             performance report is compliance-only, not both\n    report_sector[]        — child replaces parent\n    topics[]               — child replaces parent\n             — child replaces parent\n    audit_period           — child replaces parent (different period possible\n                             in omnibus reports)\n    main_audited_entities  — child replaces parent\n    other_audited_entities — child replaces parent\n\n  RESTRICTED (level constraints — pipeline must reject if violated):\n    audit_findings_categories — SECTION/SUBSECTION level ONLY.\n                                Never at report or chapter level.\n                                Use topics[] at report/chapter level instead.\n    pac_status               — CHAPTER level ONLY. Each chapter tracks\n                                PAC status independently.\n    main_audited_entities    — REPORT and CHAPTER level only. Not section\n                                or below unless metadata_override_mode=replace.\n\n  STANDALONE (not meaningful below report level — pipeline should ignore):\n    audit_period at block level — meaningless, ignore if encountered.\n\nOVERRIDE MODE EXCEPTION:\n  A content_unit with metadata_override_mode=replace (see structure.schema)\n  receives no inherited metadata from its parent. Its metadata is standalone.\n  Use for chapters in omnibus reports covering unrelated audit contexts.\n  OVERRIDE (not inherited from parent, overridable per unit): examination_coverage — set at report level for uniform coverage; override at chapter level in collection reports where chapters cover different states.",
   "title": "Inheritable Audit Metadata",
-  "description": "Fields that cascade from report level down through chapters and sections. v3.3: $comment documents full array inheritance semantics for every field; aligned with structure.schema v3.1 metadata_override_mode.",
+  "description": "Fields that cascade from report level down through chapters and sections. v3.3: $comment documents full array inheritance semantics for every field; aligned with structure.schema v3.1 metadata_override_mode. v3.7: regions.states_uts items pattern changed from ^[A-Z]{2}$ (short code) to ^IN-[A-Z]{2,3}$ (full ISO 3166-2 registry ID) — now consistent with examination_coverage.state_ut_ids and registry_states_uts.json.",
   "type": "object",
   "additionalProperties": false,
   "properties": {
@@ -76,10 +76,10 @@
         "states_uts": {
           "type": "array",
           "uniqueItems": true,
-          "description": "ADDITIVE. Two-letter state/UT codes. e.g. ['MP', 'GJ'].",
+          "description": "ADDITIVE. Full ISO 3166-2 state/UT IDs from registry_states_uts.json. e.g. ['IN-MP', 'IN-GJ']. Must match registry IDs exactly. Consistent with examination_coverage.state_ut_ids.",
           "items": {
             "type": "string",
-            "pattern": "^[A-Z]{2}$"
+            "pattern": "^IN-[A-Z]{2,3}$"
           }
         },
         "ulbs": {
